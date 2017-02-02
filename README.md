@@ -1,29 +1,21 @@
 # README #
+back-end RESTful-API application for GORUGORU web application
 
-This README would normally document whatever steps are necessary to get your application up and running.
+## Developement environment
+* JAVA JDK 1.8
+* Spring Boot starter(single jar microservice) with AOP(aspectJ) + AJP(hibernate)
+* DBMS maybe MariaDB or other
+* Build with Gradle
 
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+## Usage
+* pull repo
+* import to STS or other IDE for JAVA SPRING
+### Configuration
+* global config - application.properties
+* local config - applicaton-local.properties
+### Database configuration
+* case by case
+### How to run tests
+* JUnitTest
+### Deployment instructions
+* maybe Jenkins

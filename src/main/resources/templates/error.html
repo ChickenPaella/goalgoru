@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Error</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+		<div class="container">
+			<h1 th:text="${title}">Title</h1>
+			<div id="created" th:text="${#dates.format(timestamp)}"></div>
+			<div>
+				There was an unexpected error (type=<span th:text="${error}">Bad</span>, status=<span th:text="${status}">500</span>).
+			</div>
+			<div th:text="${message}">Not Found</div>
+			<div>
+				Please contact the operator with the above information.
+			</div>
+		</div>
+	</body>
+</html>

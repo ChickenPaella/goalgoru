@@ -27,7 +27,7 @@ public class KakaoLoginComponent implements LoginComponent{
 	final KakaoClient kakaoClient;
 	
 	public KakaoLoginComponent(){
-		kakaoClient = new KakaoClient("648dde0e73a6f287bebbb98ceb52aef1", "http://localhost:8080/api/login/kakao_oauth");
+		kakaoClient = new KakaoClient("648dde0e73a6f287bebbb98ceb52aef1", "http://localhost:8080/api/auth/kakao_oauth");
 	}
 	
 	/**
@@ -254,6 +254,25 @@ public class KakaoLoginComponent implements LoginComponent{
 		
 		return null;
 	}
+	
+	public boolean validate(String accessToken) {
+		final String json = kakaoClient.validate(accessToken);
+		logger.info(json);
+		
+		try {
+			ApiResponse res = mapper.readValue(json, ApiResponse.class);
+			if (res != null) {
+				logger.info("validate res: "+mapper.writeValueAsString(res));
+				logger.info("validate() id: "+res.getId());
+				
+				return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 
 	@Override
 	public String generateState() {
@@ -433,4 +452,5 @@ public class KakaoLoginComponent implements LoginComponent{
 		}
 		
 	}
+
 }

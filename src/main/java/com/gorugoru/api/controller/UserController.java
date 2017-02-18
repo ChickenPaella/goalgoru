@@ -1,5 +1,9 @@
 package com.gorugoru.api.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,10 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gorugoru.api.component.auth.AuthProvider;
 import com.gorugoru.api.domain.model.User;
 import com.gorugoru.api.domain.repository.UserRepository;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.UserService;
+import com.gorugoru.util.DateUtil;
 
 /**
  * JSON REST API Test
@@ -49,9 +55,14 @@ public class UserController {
 			@PathVariable("age") int age) {
 		logger.info("save() {} {}", name, age);
 		
-		User user = userService.insertUser(name, age);
+		Calendar cal = new GregorianCalendar();
+		int thisYear = cal.get(Calendar.YEAR);
+		cal.set(thisYear - age + 1, 0, 1);
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 		
-		return new ResponseEntity<String>("OK "+user.getId(), HttpStatus.OK);
+		User user = userService.registUser(AuthProvider.NONE, "", "id", "pass", "name", date, "email", "phone", "profile");
+		
+		return new ResponseEntity<String>("OK "+user.getSeq(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/list", method = RequestMethod.GET)
@@ -70,7 +81,11 @@ public class UserController {
 			@PathVariable("age") int age) {
 		logger.info("find()");
 		
-		List<User> userList = (List<User>) userRepository.findByNameAndAgeLessThan(name, age);
+		//DateUtil.ageToBirthYear(age)
+		
+		Date date = new Date();
+		
+		List<User> userList = (List<User>) userRepository.findByNameAndBirthDateLessThan(name, date);
 		
 		return new ResponseEntity<List<User>>(userList, HttpStatus.OK);
 	}

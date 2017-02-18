@@ -1,20 +1,28 @@
 package com.gorugoru.api.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gorugoru.api.component.auth.AuthAttr;
+import com.gorugoru.api.component.auth.AuthProvider;
 import com.gorugoru.api.component.auth.KakaoLoginComponent;
+import com.gorugoru.api.component.auth.KakaoLoginComponent.Token;
 import com.gorugoru.api.component.auth.KakaoLoginComponent.UserProfile;
+import com.gorugoru.api.domain.model.User;
+import com.gorugoru.api.service.UserService;
 
 /**
  * 로그인 컨트롤러
@@ -32,6 +40,9 @@ public class AuthController {
 	
 	@Autowired
 	private HttpServletRequest request;
+	
+	@Autowired
+	UserService userService;
 	
 	/**
 	 * 카카오 로그인 요청
@@ -62,7 +73,10 @@ public class AuthController {
 	@RequestMapping(path = "/kakao_oauth", method = RequestMethod.GET)
 	public String kakao_oauth(
 			@RequestParam("code") String code,
-			@RequestParam("state") String state) throws Exception{
+			@RequestParam("state") String state,
+			@CookieValue(name = "ltoat", required = false) String lastOAuthAccessToken,
+			@CookieValue(name = "ltusq", required = false) String lastUserSeq,
+			HttpServletResponse response) throws Exception{
 		
 		logger.info("kakao_oauth() - code: "+code);
 		
@@ -82,12 +96,41 @@ public class AuthController {
 		session.setAttribute(AuthAttr.AUTH_PROVIDER, AuthAttr.KAKAO);
 		session.setAttribute(AuthAttr.KAKAO_CODE, code);
 		
-		if(kakaoLogin.auth(session)){
-			//oauth 인증 성공
-			//앱 연결 자동연결 사용하므로, 재요청 400 Bad Request 발생
-//			if(kakaoLogin.login(session)){
-//			}
+		boolean needAuth = true;
+		boolean authOK = false;
+		
+		//기존 발급된 토큰 사용
+		if(lastOAuthAccessToken != null && lastUserSeq != null){
+			logger.info(lastOAuthAccessToken);
+			logger.info(lastUserSeq);
 			
+			if(userService.isExistUser(Long.parseLong(lastUserSeq))){
+				if(kakaoLogin.validate(lastOAuthAccessToken)){
+					/*TODO DB에서 토큰정보를 가져와서, 재사용하면 된다.
+					하지만 토큰 저장도 아직이다. Token객체 재사용할 수 있다. 의미는 없다.
+					needAuth = false;
+					authOK = true;
+					*/
+				}
+			}
+		}
+		
+		//토큰발급 필요
+		if(needAuth){
+			if(kakaoLogin.auth(session)){
+				//oauth 인증 성공
+				//앱 연결 자동연결 사용하므로, 재요청 400 Bad Request 발생
+//				if(kakaoLogin.login(session)){
+					authOK = true;
+//				}
+			}else{
+				//oauth 인증 실패
+				throw new Exception("Auth Fail");
+			}
+		}
+		
+		//사용자 프로필
+		if(authOK){
 			//프로필 가져오기
 			UserProfile user = kakaoLogin.userInfo(session);
 			if(user != null){
@@ -95,11 +138,23 @@ public class AuthController {
 				logger.info(user.getProperties().getNickname());
 				logger.info(user.getProperties().getProfileImage());
 				logger.info(user.getProperties().getThumbnailImage());
-				//TODO DB저장
+				
+				//DB저장 or 업데이트
+				User newUser = userService.regsistUserForSNS(AuthProvider.KAKAO, String.valueOf(user.getId()),
+						user.getProperties().getNickname(), null, null, null, user.getProperties().getThumbnailImage());
+				
+				if(newUser != null && newUser.getSeq() > 0){
+					//성공
+					Token token = (Token) session.getAttribute(AuthAttr.KAKAO_TOKEN);
+					response.addCookie(new Cookie("ltoat", token.getAccessToken()));
+					response.addCookie(new Cookie("ltusq", String.valueOf(newUser.getSeq())));
+				}else{
+					throw new Exception("Database Error");
+				}
+			}else{
+				//api 오류 or json parsing 오류
+				throw new Exception("Request Error");
 			}
-		}else{
-			//oauth 인증 실패
-			throw new Exception("Auth Fail");
 		}
 		
 		if(referer == null){

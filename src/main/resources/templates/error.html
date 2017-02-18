@@ -3,11 +3,15 @@
     <head>
         <title>Error</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+        	body{text-align:center;line-height:200%;}
+        	.container{margin:10% auto;}
+        	#created{font-size:75%;}
+        </style>
     </head>
     <body>
 		<div class="container">
-			<h1 th:text="${title}">Title</h1>
-			<div id="created" th:text="${#dates.format(timestamp)}"></div>
+			<h1><span th:text="${status}">500</span> <span th:text="${error}">Bad</span></h1>
 			<div>
 				There was an unexpected error (type=<span th:text="${error}">Bad</span>, status=<span th:text="${status}">500</span>).
 			</div>
@@ -15,6 +19,7 @@
 			<div>
 				Please contact the operator with the above information.
 			</div>
+			<div id="created" th:text="${#dates.format(timestamp)}"></div>
 		</div>
 	</body>
 </html>

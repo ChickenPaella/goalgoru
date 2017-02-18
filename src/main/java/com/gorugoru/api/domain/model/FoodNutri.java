@@ -40,27 +40,43 @@ public class FoodNutri implements Serializable{
 	
 	@Column
 	@NotNull
-	private float car;//g
+	private float carbo;//탄수화물 g
 	
 	@Column
 	@NotNull
-	private int carPercent;//%
+	private int carboPercent;//%
 	
 	@Column
 	@NotNull
-	private float pro;
+	private float protein;//단백질 g
 	
 	@Column
 	@NotNull
-	private int proPercent;
+	private int proteinPercent;//%
 	
 	@Column
 	@NotNull
-	private float fat;
+	private float fat;//지방 g
 	
 	@Column
 	@NotNull
-	private int fatPercent;
+	private int fatPercent;//%
+	
+	@Column
+	@NotNull
+	private float choles;//콜레스테롤 mg
+	
+	@Column
+	@NotNull
+	private float fiber;//g
+	
+	@Column
+	@NotNull
+	private float natrium;//나트륨 mg
+	
+	@Column
+	@NotNull
+	private float kalium;//칼륨 mg
 	
 	@Column
 	@NotNull
@@ -68,71 +84,125 @@ public class FoodNutri implements Serializable{
 	
 	public FoodNutri(){
 	}
-	
+
 	public long getSeq() {
 		return seq;
 	}
+
 	public void setSeq(long seq) {
 		this.seq = seq;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getServingSize() {
 		return servingSize;
 	}
+
 	public void setServingSize(String servingSize) {
 		this.servingSize = servingSize;
 	}
+
 	public int getCalorie() {
 		return calorie;
 	}
+
 	public void setCalorie(int calorie) {
 		this.calorie = calorie;
 	}
-	public float getCar() {
-		return car;
+
+	public float getCarbo() {
+		return carbo;
 	}
-	public void setCar(float car) {
-		this.car = car;
+
+	public void setCarbo(float carbo) {
+		this.carbo = carbo;
 	}
-	public int getCarPercent() {
-		return carPercent;
+
+	public int getCarboPercent() {
+		return carboPercent;
 	}
-	public void setCarPercent(int carPercent) {
-		this.carPercent = carPercent;
+
+	public void setCarboPercent(int carboPercent) {
+		this.carboPercent = carboPercent;
 	}
-	public float getPro() {
-		return pro;
+
+	public float getProtein() {
+		return protein;
 	}
-	public void setPro(float pro) {
-		this.pro = pro;
+
+	public void setProtein(float protein) {
+		this.protein = protein;
 	}
-	public int getProPercent() {
-		return proPercent;
+
+	public int getProteinPercent() {
+		return proteinPercent;
 	}
-	public void setProPercent(int proPercent) {
-		this.proPercent = proPercent;
+
+	public void setProteinPercent(int proteinPercent) {
+		this.proteinPercent = proteinPercent;
 	}
+
 	public float getFat() {
 		return fat;
 	}
+
 	public void setFat(float fat) {
 		this.fat = fat;
 	}
+
 	public int getFatPercent() {
 		return fatPercent;
 	}
+
 	public void setFatPercent(int fatPercent) {
 		this.fatPercent = fatPercent;
 	}
+
+	public float getCholes() {
+		return choles;
+	}
+
+	public void setCholes(float choles) {
+		this.choles = choles;
+	}
+
+	public float getFiber() {
+		return fiber;
+	}
+
+	public void setFiber(float fiber) {
+		this.fiber = fiber;
+	}
+
+	public float getNatrium() {
+		return natrium;
+	}
+
+	public void setNatrium(float natrium) {
+		this.natrium = natrium;
+	}
+
+	public float getKalium() {
+		return kalium;
+	}
+
+	public void setKalium(float kalium) {
+		this.kalium = kalium;
+	}
+
 	public String getOriginalUrl() {
 		return originalUrl;
 	}
+
 	public void setOriginalUrl(String originalUrl) {
 		this.originalUrl = originalUrl;
 	}
+	
 }

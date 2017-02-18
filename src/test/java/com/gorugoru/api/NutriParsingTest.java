@@ -88,11 +88,19 @@ public class NutriParsingTest {
     		assertThat("칼로리", is(equalTo(nutpanel_rows.eq(5).select("td").eq(0).text())));
     		fn.setCalorie(Integer.parseInt(nutpanel_rows.eq(5).select("td").eq(1).text().replace("kcal", "").trim()));
     		assertThat("탄수화물", is(equalTo(nutpanel_rows.eq(6).select("td").eq(0).text())));
-    		fn.setCar(Float.parseFloat(nutpanel_rows.eq(6).select("td").eq(1).text().replace("g", "").trim()));
+    		fn.setCarbo(Float.parseFloat(nutpanel_rows.eq(6).select("td").eq(1).text().replace("g", "").trim()));
     		assertThat("단백질", is(equalTo(nutpanel_rows.eq(8).select("td").eq(0).text())));
-    		fn.setPro(Float.parseFloat(nutpanel_rows.eq(8).select("td").eq(1).text().replace("g", "").trim()));
+    		fn.setProtein(Float.parseFloat(nutpanel_rows.eq(8).select("td").eq(1).text().replace("g", "").trim()));
     		assertThat("지방", is(equalTo(nutpanel_rows.eq(9).select("td").eq(0).text())));
     		fn.setFat(Float.parseFloat(nutpanel_rows.eq(9).select("td").eq(1).text().replace("g", "").trim()));
+    		assertThat("콜레스테롤", is(equalTo(nutpanel_rows.eq(13).select("td").eq(0).text())));
+    		fn.setCholes(Float.parseFloat(nutpanel_rows.eq(13).select("td").eq(1).text().replace("mg", "").trim()));
+    		assertThat("식이섬유", is(equalTo(nutpanel_rows.eq(14).select("td").eq(0).text())));
+    		fn.setFiber(Float.parseFloat(nutpanel_rows.eq(14).select("td").eq(1).text().replace("g", "").trim()));
+    		assertThat("나트륨", is(equalTo(nutpanel_rows.eq(15).select("td").eq(0).text())));
+    		fn.setNatrium(Float.parseFloat(nutpanel_rows.eq(15).select("td").eq(1).text().replace("mg", "").trim()));
+    		assertThat("칼륨", is(equalTo(nutpanel_rows.eq(16).select("td").eq(0).text())));
+    		fn.setKalium(Float.parseFloat(nutpanel_rows.eq(16).select("td").eq(1).text().replace("mg", "").trim()));
     		
     		//칼로리 분석
     		Element fact = factPanel.select(".cfp_breakdown_container").first();
@@ -100,9 +108,9 @@ public class NutriParsingTest {
     		
     		int s;
 			s = factString.indexOf("탄수화물")+"탄수화물 (".length();
-			fn.setCarPercent(Integer.parseInt(factString.substring(s, s + 2)));
+			fn.setCarboPercent(Integer.parseInt(factString.substring(s, s + 2)));
 			s = factString.indexOf("단백질")+"단백질 (".length();
-			fn.setProPercent(Integer.parseInt(factString.substring(s, s + 2)));
+			fn.setProteinPercent(Integer.parseInt(factString.substring(s, s + 2)));
 			s = factString.indexOf("지방")+"지방 (".length();
 			fn.setFatPercent(Integer.parseInt(factString.substring(s, s + 2)));
 			

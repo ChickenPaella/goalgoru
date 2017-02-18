@@ -1,5 +1,9 @@
 package com.gorugoru.api;
 
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +15,11 @@ import com.gorugoru.util.NetUtil;
 public class Application {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
+	
+	@PostConstruct
+	void started() {
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+	}
 			
 	public static void main(String[] args) {
 		//System.setProperty("debug", "true");//AUTO-CONFIGURATION REPORT

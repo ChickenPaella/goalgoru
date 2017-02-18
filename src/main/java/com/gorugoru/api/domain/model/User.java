@@ -32,12 +32,12 @@ public class User implements Serializable{
 	@JsonView(Views.DEF.class)
 	private long seq;
 	
-	@Column(name = "auth_provider")
+	@Column
 	@NotNull
 	@JsonView(Views.DEF.class)
 	private String authProvider;
 
-	@Column(nullable = true, name = "auth_uid")
+	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
 	private String authUID;
 
@@ -55,7 +55,7 @@ public class User implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String name;
 	
-	@Column(nullable = true, name = "birth_date")
+	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
 	@JsonView(Views.DEF.class)
 	private Date birthDate;
@@ -68,7 +68,7 @@ public class User implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String phone;
 
-	@Column(name = "profile_image")
+	@Column
 	@NotNull
 	@JsonView(Views.DEF.class)
 	private String profileImage;

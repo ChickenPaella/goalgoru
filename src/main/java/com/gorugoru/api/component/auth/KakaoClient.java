@@ -111,6 +111,18 @@ public class KakaoClient {
 	 * @return
 	 */
 	private String requestAPI(final String path, final String accessToken, final MultiValueMap<String, String> body){
+		return requestAPI(path, HttpMethod.POST, accessToken, body);
+	}
+	
+	/**
+	 * request resource server
+	 * @param path
+	 * @param method
+	 * @param accessToken
+	 * @param body
+	 * @return
+	 */
+	private String requestAPI(final String path, final HttpMethod method, final String accessToken, final MultiValueMap<String, String> body){
 		final URI uri = UriComponentsBuilder.newInstance().scheme("https").host("kapi.kakao.com")
 				.path(path)
 				.build()
@@ -130,7 +142,7 @@ public class KakaoClient {
 			entity = new HttpEntity<String>("", headers);
 		}
 	     
-	    ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+	    ResponseEntity<String> response = restTemplate.exchange(uri, method, entity, String.class);
 		
 	    return response.getBody();
 	}
@@ -179,5 +191,12 @@ public class KakaoClient {
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
 	    body.add("properties", "{}");//가입하는 사용자의 정보. Json 형태의 key:value.
 		return requestAPI("/v1/user/update_profile", accessToken, body);
+	}
+	
+	/**
+	 * 사용자 토큰 유효성 검사 및 정보 얻기
+	 */
+	public String validate(final String accessToken) {
+		return requestAPI("/v1/user/access_token_info", HttpMethod.GET, accessToken, null);
 	}
 }

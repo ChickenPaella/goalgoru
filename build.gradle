@@ -87,6 +87,8 @@ dependencies {
 	
 	//external
 	compile("com.squareup.okhttp3:okhttp:3.6.0")//http client
+	compile("org.jsoup:jsoup:1.10.2")//html parser FOR nutrition parsing
+	
 }
 
 eclipse {

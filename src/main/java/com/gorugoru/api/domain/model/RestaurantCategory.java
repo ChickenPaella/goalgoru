@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.gorugoru.api.jackson.Views;
 
 @Entity
-@Table(name = "restaurant")
-public class Restaurant implements Serializable{
-
+@Table(name = "category")
+public class RestaurantCategory implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -30,27 +30,7 @@ public class Restaurant implements Serializable{
 	@Column
 	@NotNull
 	@JsonView(Views.DEF.class)
-	private String dong;
-	
-	@Column
-	@NotNull
-	@JsonView(Views.DEF.class)
 	private String name;
-	
-	@Column
-	@NotNull
-	@JsonView(Views.DEF.class)
-	private String category;
-	
-	@Column
-	@NotNull
-	@JsonView(Views.DEF.class)
-	private String address;
-	
-	@Column
-	@NotNull
-	@JsonView(Views.DEF.class)
-	private String phone;
 	
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -60,16 +40,12 @@ public class Restaurant implements Serializable{
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NOW()")
 	@JsonView(Views.DEF.class)
 	private Date created;
+
+	public RestaurantCategory() {}
 	
-	public Restaurant() {}
-	
-	public Restaurant(String dong, String name, String category, String address, String phone) {
+	public RestaurantCategory(String name) {
 		super();
-		this.dong = dong;
 		this.name = name;
-		this.category = category;
-		this.address = address;
-		this.phone = phone;
 	}
 
 	public long getSeq() {
@@ -80,14 +56,6 @@ public class Restaurant implements Serializable{
 		this.seq = seq;
 	}
 
-	public String getDong() {
-		return dong;
-	}
-
-	public void setDong(String dong) {
-		this.dong = dong;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -95,31 +63,7 @@ public class Restaurant implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
+	
 	public Date getModified() {
 		return modified;
 	}
@@ -138,7 +82,6 @@ public class Restaurant implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Restaurant [seq=" + seq + ", dong=" + dong + ", name=" + name + ", category=" + category + ", address="
-				+ address + ", phone=" + phone + ", modified=" + modified + ", created=" + created + "]";
+		return "RestaurantCategory [seq=" + seq + ", name=" + name + ", modified=" + modified + ", created=" + created + "]";
 	}
 }

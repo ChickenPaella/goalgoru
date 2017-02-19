@@ -1,6 +1,7 @@
 package com.gorugoru.api.domain.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -22,7 +25,7 @@ public class Restaurant implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@JsonView(Views.DEF.class)
-	private long id;
+	private long seq;
 	
 	@Column
 	@NotNull
@@ -49,9 +52,19 @@ public class Restaurant implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String phone;
 	
+	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+	@Temporal(TemporalType.TIMESTAMP)
+	@JsonView(Views.DEF.class)
+	private Date modified;
+
+	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NOW()")
+	@JsonView(Views.DEF.class)
+	private Date created;
+	
 	public Restaurant() {}
 	
 	public Restaurant(String dong, String name, String category, String address, String phone) {
+		super();
 		this.dong = dong;
 		this.name = name;
 		this.category = category;
@@ -59,12 +72,12 @@ public class Restaurant implements Serializable{
 		this.phone = phone;
 	}
 
-	public long getId() {
-		return id;
+	public long getSeq() {
+		return seq;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setSeq(long seq) {
+		this.seq = seq;
 	}
 
 	public String getDong() {
@@ -107,9 +120,25 @@ public class Restaurant implements Serializable{
 		this.phone = phone;
 	}
 
+	public Date getModified() {
+		return modified;
+	}
+
+	public void setModified(Date modified) {
+		this.modified = modified;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
 	@Override
 	public String toString() {
-		return "Restaurant [ id = " + id + ", dong = " + dong + ", name = " + name + ", category = " + category + ", address = "
-				+ address + ", phone = " + phone + "]";
+		return "Restaurant [seq=" + seq + ", dong=" + dong + ", name=" + name + ", category=" + category + ", address="
+				+ address + ", phone=" + phone + ", modified=" + modified + ", created=" + created + "]";
 	}
 }

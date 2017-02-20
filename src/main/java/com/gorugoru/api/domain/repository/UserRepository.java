@@ -23,6 +23,10 @@ import com.gorugoru.api.domain.model.User;
 @Transactional
 @RepositoryRestResource(path = "user")
 public interface UserRepository extends CrudRepository<User, Long> {
+	
+	public abstract User findOneById(String id);
+	
+	public abstract User findOneByAuthProviderAndAuthUID(String string, String authUID);
  
 	public abstract List<User> findByNameAndBirthDateLessThan(String name, Date birth_date);
  
@@ -30,7 +34,4 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	public abstract List<User> findByNameAndBirthDateLessThanSQL(@Param("name") String name, @Param("birth_date") Date birth_date);
  
 	public abstract List<User> findByNameAndBirthDateLessThanOrderByBirthDateDesc(String name, Date birth_date);
-
-	public abstract List<User> findByAuthProviderAndAuthUID(String string, String authUID);
- 
 }

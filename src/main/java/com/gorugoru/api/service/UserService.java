@@ -31,16 +31,30 @@ public class UserService {
 	 * @param phone
 	 * @param profileImage
 	 * @return
+	 * @throws Exception 
 	 */
-	public User regsistUserForSNS(AuthProvider authProvider, String authUID, String name, String birthDate, String email,
-			String phone, String profileImage){
+	public User regsistUserForSNS(AuthProvider authProvider, String authUID, String name, String birthDate,
+			String email, String phone, String profileImage) {
 		
-		List<User> users = userRepository.findByAuthProviderAndAuthUID(authProvider.toString(), authUID);
-		for(int i=0;i<users.size();i++){
-			logger.info(users.toString());
+		User user = userRepository.findOneByAuthProviderAndAuthUID(authProvider.toString(), authUID);
+		
+		if(user == null){
+			logger.info("insert New User");
+			//insert
+			String tmpId = "-temp-"+authProvider.toString()+"-"+authUID;
+			return registUser(authProvider, authUID, tmpId, null, name, birthDate, email, phone, profileImage);
+		}else{
+			logger.info("modify exists User: "+user.toString());
+			//update
+			user.setName(name);
+			user.setBirthDate(DateUtil.parseDate(birthDate));
+			user.setEmail(email);
+			user.setPhone(phone);
+			user.setProfileImage(profileImage);
+			userRepository.save(user);
 		}
-		String tmpId = "-temp-"+authProvider.toString()+"-"+authUID;
-		return registUser(authProvider, authUID, tmpId, null, name, birthDate, email, phone, profileImage);
+		
+		return user;
 	}
 	
 	/**
@@ -87,7 +101,11 @@ public class UserService {
 		return userList;
 	}
 
-	public boolean isExistUser(long lastUserSeq) {
-		return userRepository.findOne(lastUserSeq) != null;
+	public boolean exists(long seq) {
+		return userRepository.exists(seq);
+	}
+
+	public User getUserById(String id) {
+		return userRepository.findOneById(id);
 	}
 }

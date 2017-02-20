@@ -49,6 +49,21 @@ public class UserController {
 	@Autowired
 	ObjectMapper mapper;
 	
+	@RequestMapping(path = "/view/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> view(HttpServletRequest request, ModelMap model,
+			@PathVariable("id") String id) throws JsonProcessingException {
+		logger.info("view() id: "+id);
+		
+		User user = userService.getUserById(id);
+		if(user == null){
+			return new ResponseEntity<String>("{result:\"NOT EXIST\"}", HttpStatus.BAD_REQUEST);
+		}
+		
+        String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(user);
+		
+		return new ResponseEntity<String>(json, HttpStatus.OK);
+	}
+	
 	@RequestMapping(path = "/save/{name}/{age}", method = RequestMethod.GET)
 	public ResponseEntity<?> save(HttpServletRequest request, ModelMap model,
 			@PathVariable("name") String name,

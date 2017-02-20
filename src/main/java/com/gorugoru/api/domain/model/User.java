@@ -3,14 +3,19 @@ package com.gorugoru.api.domain.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -22,7 +27,7 @@ import com.gorugoru.api.jackson.Views;
  *
  */
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints={@UniqueConstraint(columnNames = {"authProvider", "authUID"})})
 public class User implements Serializable{
  
 	private static final long serialVersionUID = 1L;
@@ -34,20 +39,20 @@ public class User implements Serializable{
 	
 	@Column
 	@NotNull
-	@JsonView(Views.DEF.class)
+	@JsonView(Views.ALL.class)
 	private String authProvider;
 
 	@Column(nullable = true)
-	@JsonView(Views.DEF.class)
+	@JsonView(Views.ALL.class)
 	private String authUID;
 
-	@Column
+	@Column(unique = true)
 	@NotNull
 	@JsonView(Views.DEF.class)
 	private String id;
 
 	@Column(nullable = true)
-	@JsonView(Views.DEF.class)
+	@JsonView(Views.ALL.class)
 	private String pass;
 
 	@Column
@@ -72,16 +77,12 @@ public class User implements Serializable{
 	@NotNull
 	@JsonView(Views.DEF.class)
 	private String profileImage;
-
-	@Column
+	
+	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_point_seq")
 	@NotNull
 	@JsonView(Views.DEF.class)
-	private int point;
-
-	@Column
-	@NotNull
-	@JsonView(Views.DEF.class)
-	private int badge;
+	private UserPoint point;
 	
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -107,6 +108,7 @@ public class User implements Serializable{
 		this.email = email;
 		this.phone = phone;
 		this.profileImage = profileImage;
+		this.point = new UserPoint();
 	}
  
 	public long getSeq() {
@@ -188,21 +190,13 @@ public class User implements Serializable{
 	public void setProfileImage(String profileImage) {
 		this.profileImage = profileImage;
 	}
-
-	public int getPoint() {
+	
+	public UserPoint getPoint() {
 		return point;
 	}
 
-	public void setPoint(int point) {
+	public void setPoint(UserPoint point) {
 		this.point = point;
-	}
-
-	public int getBadge() {
-		return badge;
-	}
-
-	public void setBadge(int badge) {
-		this.badge = badge;
 	}
 
 	public Date getModified() {
@@ -225,7 +219,7 @@ public class User implements Serializable{
 	public String toString() {
 		return "User [seq=" + seq + ", authProvider=" + authProvider + ", authUID=" + authUID + ", id=" + id + ", pass="
 				+ pass + ", name=" + name + ", birthDate=" + birthDate + ", email=" + email + ", phone=" + phone
-				+ ", profileImage=" + profileImage + ", point=" + point + ", badge=" + badge + ", modified=" + modified
+				+ ", profileImage=" + profileImage + ", point=" + point + ", modified=" + modified
 				+ ", created=" + created + "]";
 	}
 	

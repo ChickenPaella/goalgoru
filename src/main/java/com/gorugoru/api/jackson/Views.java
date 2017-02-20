@@ -5,4 +5,5 @@ public class Views {
 	public static interface LESS extends Public {}
 	public static interface DEF extends LESS {}
 	public static interface MORE extends DEF {}
+	public static interface ALL extends MORE {}
 }

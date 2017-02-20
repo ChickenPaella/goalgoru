@@ -8,8 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,7 +102,7 @@ public class AuthController {
 			logger.info(lastOAuthAccessToken);
 			logger.info(lastUserSeq);
 			
-			if(userService.isExistUser(Long.parseLong(lastUserSeq))){
+			if(userService.exists(Long.parseLong(lastUserSeq))){
 				if(kakaoLogin.validate(lastOAuthAccessToken)){
 					/*TODO DB에서 토큰정보를 가져와서, 재사용하면 된다.
 					하지만 토큰 저장도 아직이다. Token객체 재사용할 수 있다. 의미는 없다.

@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.gorugoru.api.jackson.Views;
 
 @Entity
-@Table(name = "category")
+@Table(name = "restaurant_category")
 public class RestaurantCategory implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -34,11 +34,11 @@ public class RestaurantCategory implements Serializable{
 	
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonView(Views.DEF.class)
+	@JsonView(Views.MORE.class)
 	private Date modified;
 
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NOW()")
-	@JsonView(Views.DEF.class)
+	@JsonView(Views.MORE.class)
 	private Date created;
 
 	public RestaurantCategory() {}

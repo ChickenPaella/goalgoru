@@ -3,11 +3,14 @@ package com.gorugoru.api.domain.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,7 +34,7 @@ public class Restaurant implements Serializable{
 	@NotNull
 	@JsonView(Views.DEF.class)
 	private String dong;
-	
+
 	@Column
 	@NotNull
 	@JsonView(Views.DEF.class)
@@ -52,13 +55,18 @@ public class Restaurant implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String phone;
 	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "restaurant", optional = true, fetch = FetchType.LAZY)
+	@NotNull
+	@JsonView(Views.DEF.class)
+	private RestaurantLocation location;
+	
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonView(Views.DEF.class)
+	@JsonView(Views.MORE.class)
 	private Date modified;
 
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NOW()")
-	@JsonView(Views.DEF.class)
+	@JsonView(Views.MORE.class)
 	private Date created;
 	
 	public Restaurant() {}
@@ -70,6 +78,17 @@ public class Restaurant implements Serializable{
 		this.category = category;
 		this.address = address;
 		this.phone = phone;
+	}
+	
+	public Restaurant(String dong, String name, String category, String address, String phone,
+			RestaurantLocation location) {
+		super();
+		this.dong = dong;
+		this.name = name;
+		this.category = category;
+		this.address = address;
+		this.phone = phone;
+		this.location = location;
 	}
 
 	public long getSeq() {
@@ -118,6 +137,14 @@ public class Restaurant implements Serializable{
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	public RestaurantLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(RestaurantLocation location) {
+		this.location = location;
 	}
 
 	public Date getModified() {

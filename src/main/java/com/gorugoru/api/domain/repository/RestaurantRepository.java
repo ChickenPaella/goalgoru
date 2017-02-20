@@ -1,13 +1,19 @@
 package com.gorugoru.api.domain.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.gorugoru.api.domain.model.Restaurant;
 
 @Transactional
-//removed @RepositoryRestResource(path = "restaurant")
-public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+	
+	public abstract List<Restaurant> findByDongAndCategoryOrderByNameAsc(String dong, String cate);
+	public abstract List<Restaurant> findByDongAndCategoryOrderByNameDesc(String dong, String cate);
+	public abstract List<Restaurant> findByCategoryOrderByNameAsc(String cate);
+	public abstract List<Restaurant> findByCategoryOrderByNameDesc(String cate);
 
 }

@@ -42,11 +42,11 @@ public class RestaurantLocation implements Serializable{
 	
 	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
-	private String gugun;
+	private String sigugun;
 	
 	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
-	private String dongeup;
+	private String dong;
 	
 	@Column
 	@NotNull
@@ -70,21 +70,21 @@ public class RestaurantLocation implements Serializable{
 	public RestaurantLocation(){
 	}
 
-	public RestaurantLocation(String sido, String gugun, String dongeup, String street, String etc) {
+	public RestaurantLocation(String sido, String sigugun, String dong, String street, String etc) {
 		super();
 		this.sido = sido;
-		this.gugun = gugun;
-		this.dongeup = dongeup;
+		this.sigugun = sigugun;
+		this.dong = dong;
 		this.street = street;
 		this.etc = etc;
 	}
 
-	public RestaurantLocation(String sido, String gugun, String dongeup, String street, String etc, double latitude,
+	public RestaurantLocation(String sido, String sigugun, String dong, String street, String etc, double latitude,
 			double longitude) {
 		super();
 		this.sido = sido;
-		this.gugun = gugun;
-		this.dongeup = dongeup;
+		this.sigugun = sigugun;
+		this.dong = dong;
 		this.street = street;
 		this.etc = etc;
 		this.latitude = latitude;
@@ -115,20 +115,20 @@ public class RestaurantLocation implements Serializable{
 		this.sido = sido;
 	}
 
-	public String getGugun() {
-		return gugun;
+	public String getSigugun() {
+		return sigugun;
 	}
 
-	public void setGugun(String gugun) {
-		this.gugun = gugun;
+	public void setSigugun(String sigugun) {
+		this.sigugun = sigugun;
 	}
 
-	public String getDongeup() {
-		return dongeup;
+	public String getDong() {
+		return dong;
 	}
 
-	public void setDongeup(String dongeup) {
-		this.dongeup = dongeup;
+	public void setDong(String dong) {
+		this.dong = dong;
 	}
 
 	public String getStreet() {
@@ -165,13 +165,13 @@ public class RestaurantLocation implements Serializable{
 
 	@Override
 	public String toString() {
-		return "RestaurantLocation [seq=" + seq + ", restaurant=" + restaurant + ", sido=" + sido + ", gugun=" + gugun
-				+ ", dongeup=" + dongeup + ", street=" + street + ", etc=" + etc + ", latitude=" + latitude
+		return "RestaurantLocation [seq=" + seq + ", restaurant=" + restaurant + ", sido=" + sido + ", gugun=" + sigugun
+				+ ", dongeup=" + dong + ", street=" + street + ", etc=" + etc + ", latitude=" + latitude
 				+ ", longitude=" + longitude + "]";
 	}
 
 	public String toAddressString() {
-		return AddressUtil.merge(sido, gugun, dongeup, street, etc);
+		return AddressUtil.merge(sido, sigugun, dong, street, etc);
 	}
 	
 }

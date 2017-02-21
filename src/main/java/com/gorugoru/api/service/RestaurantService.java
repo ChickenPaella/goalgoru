@@ -32,6 +32,11 @@ public class RestaurantService {
 		return rsntCateList;
 	}
 	
+	public Restaurant insertRestaurant(Restaurant restaurant) {
+		restaurant = restaurantRepository.save(restaurant);
+		return restaurant;
+	}
+	
 	public Restaurant insertRestaurant(String dong, String name, String category, String address, String phone,
 			String sido, String gugun, String dongeup, String street, String etc) {
 		Restaurant restaurant = new Restaurant(dong, name, category, address, phone);
@@ -48,9 +53,8 @@ public class RestaurantService {
 		return restaurantList;
 	}
 	
-	public List<Restaurant> getRestaurantListByCate(String cate) {
-		Sort sort = new Sort(Sort.Direction.ASC, "name");
-		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findAll(sort);
+	public List<Restaurant> getRestaurantListByDongAndCate(String dong, String cate) {
+		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findByDongAndCategoryOrderByNameAsc(dong, cate);
 		return restaurantList;
 	}
 

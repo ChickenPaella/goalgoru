@@ -1,5 +1,9 @@
 package com.gorugoru.api.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +26,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.domain.model.RestaurantCategory;
-import com.gorugoru.api.domain.model.User;
-import com.gorugoru.api.domain.repository.UserRepository;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.RestaurantService;
+import com.gorugoru.util.FileUtil;
 
 /**
  * 식당 컨트롤러
@@ -34,13 +39,16 @@ import com.gorugoru.api.service.RestaurantService;
 @RequestMapping(path = "/rsnt",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class RestaurantController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(RestaurantController.class);
 	
 	@Autowired
 	RestaurantService rsntService;
 	
 	@Autowired
 	ObjectMapper mapper;
+	
+	@Value(value = "classpath:rsnt_db.txt")
+	private Resource rsntDB;
 	
 	/**
 	 * 식당 카테고리 리스트
@@ -76,20 +84,29 @@ public class RestaurantController {
 	 * @param model
 	 * @param cate
 	 * @return
-	 * @throws JsonProcessingException
+	 * @throws IOException 
 	 */
-	@RequestMapping(path = "/{cate}/list", method = RequestMethod.GET)
+	@RequestMapping(path = "/{base_address}/{cate}/list", method = RequestMethod.GET)
 	public ResponseEntity<?> cateList(HttpServletRequest request, ModelMap model,
-			@PathVariable("cate") String cate) throws JsonProcessingException {
-		logger.info("cateList() cate: "+cate);
+			@PathVariable("base_address") String base_address, @PathVariable("cate") String cate) throws IOException {
 		
-		List<Restaurant> rsntList = rsntService.getRestaurantList();
+		//TODO 받을 값이 주소 단위 동까지, 음식 카테고리, 음식메뉴 - 해당리스트
+		logger.info("cateList() base_address: "+base_address+" cate: "+cate);
+		
+		List<Restaurant> rsntList = rsntService.getRestaurantListByDongAndCate("갈현1동", cate);
 		
 		if(rsntList.isEmpty()){
 			//dummy
-			rsntService.insertRestaurant("갈현1동", "사대명가", "한식", "블라블라", "02-123-1234", "시도", "구군", "동읍", "도로명", "기타");
 			
-			rsntList = rsntService.getRestaurantList();
+			List<Restaurant> list = FileUtil.loadRsntDBCSV(rsntDB.getFile());
+			
+			for(int i=0;i<list.size();i++){
+				rsntService.insertRestaurant(list.get(i));
+			}
+			
+			//rsntService.insertRestaurant("갈현1동", "사대명가", "한식", "블라블라", "02-123-1234", "시도", "구군", "동읍", "도로명", "기타");
+			
+			rsntList = rsntService.getRestaurantListByDongAndCate("갈현1동", cate);
 		}
 		
         String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);

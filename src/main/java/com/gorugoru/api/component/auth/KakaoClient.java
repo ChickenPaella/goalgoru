@@ -14,13 +14,15 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.gorugoru.api.component.OAuth2Client;
+
 /**
  * 카카오 REST API 클라이언트
  * TODO: 쓰레딩 고려해야함. RestTemplate thread-safe??
  * @author Administrator
  *
  */
-public class KakaoClient {
+public class KakaoClient implements OAuth2Client {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(KakaoClient.class);
 	

@@ -65,7 +65,7 @@ public class Restaurant implements Serializable{
 	@JsonView(Views.MORE.class)
 	private Date modified;
 
-	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NOW()")
+	@Column(nullable = false, insertable = true, updatable = false, columnDefinition = "DATETIME DEFAULT '1000-01-01 00:00:00'")
 	@JsonView(Views.MORE.class)
 	private Date created;
 	

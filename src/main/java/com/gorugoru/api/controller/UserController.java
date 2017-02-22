@@ -27,7 +27,6 @@ import com.gorugoru.api.domain.model.User;
 import com.gorugoru.api.domain.repository.UserRepository;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.UserService;
-import com.gorugoru.util.DateUtil;
 
 /**
  * JSON REST API Test
@@ -84,8 +83,7 @@ public class UserController {
 	public ResponseEntity<?> list(HttpServletRequest request, ModelMap model) throws JsonProcessingException {
 		logger.info("list()");
 		
-		List<User> userList = userService.getUserList();
-        String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(userList);
+        String json = userService.getUserListJSON(Views.DEF.class);
 		
 		return new ResponseEntity<String>(json, HttpStatus.OK);
 	}

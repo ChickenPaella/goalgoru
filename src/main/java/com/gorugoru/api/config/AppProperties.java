@@ -35,7 +35,7 @@ public class AppProperties {
 		this.version = version;
 	}
 
-	private static class Version {
+	public static class Version {
 		
 		/**
 		 * application's version id.

@@ -3,13 +3,18 @@ package com.gorugoru.api.component.geo;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gorugoru.api.component.auth.KakaoClient;
+import com.gorugoru.api.component.geo.Coord.Channel.Item;
 import com.gorugoru.api.dto.Address;
 import com.gorugoru.api.dto.Location;
 
@@ -19,13 +24,20 @@ public class DaumLocalComponent {
 	private static final Logger logger = LoggerFactory.getLogger(DaumLocalComponent.class);
 	
 	@Autowired
-	ObjectMapper mapper;
+	private ObjectMapper mapper;
 	
-	final DaumLocalClient localClient;
+	private DaumLocalClient localClient;
+	
+	@Value("${gorugoru.api.daum.api-key}")
+	private String api_key;
 	
 	public DaumLocalComponent(){
-		localClient = new DaumLocalClient("4021d7cd43b6525e1fadf9c3eaba231b");
 	}
+	
+	@PostConstruct
+    public void init() {
+		localClient = new DaumLocalClient(api_key);
+    }
 	
 	public Location addr2coord(String address){
 		/*{"channel":{"totalCount":"1","link":"http:\/\/developers.daum.net\/services","result":"1","generator":"Daum Open API",
@@ -49,14 +61,16 @@ public class DaumLocalComponent {
 		}
 		
 		if(coord != null && coord.getChannel().getItem().size() > 0){
+			//첫벌째 결과만 사용..
 			Location loc = new Location();
-			logger.info(coord.getChannel().getItem().get(0).getTitle());
-			loc.setSido(coord.getChannel().getItem().get(0).getLocalName_1());
-			loc.setSigugun(coord.getChannel().getItem().get(0).getLocalName_2());
-			loc.setDong(coord.getChannel().getItem().get(0).getLocalName_3());
-			//loc.setEtc((String) coord.getChannel().getItem().get(0).getLocalName_4());
-			loc.setLatitude(coord.getChannel().getItem().get(0).getLat());
-			loc.setLongitude(coord.getChannel().getItem().get(0).getLng());
+			Item item = coord.getChannel().getItem().get(0);
+			logger.info(item.getTitle());
+			loc.setSido(item.getLocalName_1());
+			loc.setSigugun(item.getLocalName_2());
+			loc.setDong(item.getLocalName_3());
+			//loc.setEtc((String) item.getLocalName_4());
+			loc.setLatitude(item.getLat());
+			loc.setLongitude(item.getLng());
 			
 			return loc;
 		}

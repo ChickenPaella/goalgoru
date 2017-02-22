@@ -6,11 +6,13 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,13 +24,23 @@ public class KakaoLoginComponent implements LoginComponent{
 	private static final Logger logger = LoggerFactory.getLogger(KakaoLoginComponent.class);
 	
 	@Autowired
-	ObjectMapper mapper;
+	private ObjectMapper mapper;
 	
-	final KakaoClient kakaoClient;
+	private KakaoClient kakaoClient;
+
+	@Value("${gorugoru.auth.kakao.client-id}")
+	private String client_id;
+
+	@Value("${gorugoru.auth.kakao.rediect-url}")
+	private String redirect_url;
 	
 	public KakaoLoginComponent(){
-		kakaoClient = new KakaoClient("648dde0e73a6f287bebbb98ceb52aef1", "http://localhost:8080/api/auth/kakao_oauth");
 	}
+	
+	@PostConstruct
+    public void init() {
+		kakaoClient = new KakaoClient(client_id, redirect_url);
+    }
 	
 	/**
 	 * 카카오 로그인

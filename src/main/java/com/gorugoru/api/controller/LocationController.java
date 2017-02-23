@@ -22,9 +22,10 @@ import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.dto.Address;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.LocationService;
+import com.gorugoru.api.service.RestaurantService;
 
 @RestController
-@RequestMapping(value = "/location", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "/location", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class LocationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
@@ -36,9 +37,12 @@ public class LocationController {
 	LocationService locationService;
 	
 	@Autowired
+	RestaurantService restaurantService;
+	
+	@Autowired
 	ObjectMapper mapper;
 	
-	@RequestMapping(value = "/dong/{latitude},{longitude}", method = RequestMethod.GET)
+	@RequestMapping(path = "/dong/{latitude},{longitude}", method = RequestMethod.GET)
 	public ResponseEntity<?> dongList(HttpServletRequest req, ModelMap model,
 			@PathVariable("latitude") String latitude, @PathVariable("longitude") String longitude) throws JsonProcessingException{
 		

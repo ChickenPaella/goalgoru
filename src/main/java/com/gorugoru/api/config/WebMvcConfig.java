@@ -29,7 +29,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
     	//assign templates non-controller used. 단순 뷰페이지 호출
     	registry.addViewController("/home").setViewName("home");
         registry.addViewController("/").setViewName("home");
-        registry.addViewController("/admin/login").setViewName("admin/login");
+        registry.addViewController("/auth/login").setViewName("login");
     }
 	
 }

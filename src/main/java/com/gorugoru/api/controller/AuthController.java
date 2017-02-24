@@ -8,6 +8,12 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,7 +84,7 @@ public class AuthController {
 		
 		logger.info("kakao_oauth() - code: "+code);
 		
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		String referer = (String) session.getAttribute(AuthAttr.KAKAO_REFERER);
 		logger.info("kakao_oauth() - referer: "+referer);
 		String state2 = (String) session.getAttribute(AuthAttr.KAKAO_STATE);
@@ -130,19 +136,31 @@ public class AuthController {
 		//사용자 프로필
 		if(authOK){
 			//프로필 가져오기
-			UserProfile user = kakaoLogin.userInfo(session);
-			if(user != null){
-				logger.info(String.valueOf(user.getId()));
-				logger.info(user.getProperties().getNickname());
-				logger.info(user.getProperties().getProfileImage());
-				logger.info(user.getProperties().getThumbnailImage());
+			UserProfile userProfile = kakaoLogin.userInfo(session);
+			if(userProfile != null){
+				logger.info(String.valueOf(userProfile.getId()));
+				logger.info(userProfile.getProperties().getNickname());
+				logger.info(userProfile.getProperties().getProfileImage());
+				logger.info(userProfile.getProperties().getThumbnailImage());
 				
 				//DB저장 or 업데이트
-				User newUser = userService.regsistUserForSNS(AuthProvider.KAKAO, String.valueOf(user.getId()),
-						user.getProperties().getNickname(), null, null, null, user.getProperties().getThumbnailImage());
+				User newUser = userService.regsistUserForSNS(AuthProvider.KAKAO, String.valueOf(userProfile.getId()),
+						userProfile.getProperties().getNickname(), null, null, null, userProfile.getProperties().getThumbnailImage());
 				
 				if(newUser != null && newUser.getSeq() > 0){
 					//성공
+					// Security Login
+		            final SecurityContext securityContext = SecurityContextHolder.getContext();
+		            final String principal = AuthProvider.KAKAO.toString()+"-"+newUser.getAuthUID();
+					final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+							principal, "null",
+							AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+		            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+					securityContext.setAuthentication(authentication);
+					SecurityContextHolder.setContext(securityContext);
+					session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+					
+					//토큰재사용 쿠키
 					Token token = (Token) session.getAttribute(AuthAttr.KAKAO_TOKEN);
 					response.addCookie(new Cookie("ltoat", token.getAccessToken()));
 					response.addCookie(new Cookie("ltusq", String.valueOf(newUser.getSeq())));
@@ -162,15 +180,16 @@ public class AuthController {
 		return "redirect:".concat(referer);
 	}
 	
-	@RequestMapping(value = "/logout")
-	public String logout() {
-		HttpSession session = request.getSession();
-		if(kakaoLogin.logout(session)){
-			session.removeAttribute(AuthAttr.AUTH_PROVIDER);
-		}
-
-		return "redirect:/";
-	}
+	//해당 처리는 스프링 시큐리티 설정으로 이동.
+//	@RequestMapping(value = "/logout")
+//	public String logout() {
+//		HttpSession session = request.getSession();
+//		if(kakaoLogin.logout(session)){
+//			session.removeAttribute(AuthAttr.AUTH_PROVIDER);
+//		}
+//
+//		return "redirect:/";
+//	}
 	
 	//=======================================TEST===============================================
 	

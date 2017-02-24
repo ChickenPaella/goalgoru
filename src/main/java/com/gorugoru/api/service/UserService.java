@@ -8,6 +8,10 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,10 +19,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.auth.AuthProvider;
 import com.gorugoru.api.domain.model.User;
 import com.gorugoru.api.domain.repository.UserRepository;
+import com.gorugoru.api.dto.SecUser;
 import com.gorugoru.util.DateUtil;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	
@@ -126,5 +131,18 @@ public class UserService {
 
 	public User getUserById(String id) {
 		return userRepository.findOneById(id);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		User user = getUserById(username);
+		
+		if (user != null) {
+			SecUser securityUser = new SecUser(user.getId(), user.getPass(), AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+			return securityUser;
+        } else {
+            throw new UsernameNotFoundException("No user with username '" + username + "' found!");
+        }
 	}
 }

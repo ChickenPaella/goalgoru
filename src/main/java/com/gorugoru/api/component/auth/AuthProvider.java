@@ -1,7 +1,7 @@
 package com.gorugoru.api.component.auth;
 
 public final class AuthProvider {
-	public final String value;
+	private final String value;
 	public static final String NONE_VALUE = "none";
 	public static final AuthProvider NONE;
 	public static final String KAKAO_VALUE = "kakao";

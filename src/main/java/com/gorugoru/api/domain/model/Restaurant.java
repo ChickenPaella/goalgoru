@@ -55,7 +55,7 @@ public class Restaurant implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String phone;
 	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "restaurant", optional = true, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "restaurant", optional = true, fetch = FetchType.EAGER)//for camp LAZY)
 	@NotNull
 	@JsonView(Views.DEF.class)
 	private RestaurantLocation location;

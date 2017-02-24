@@ -78,7 +78,7 @@ public class User implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String profileImage;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)//for camp LAZY)
 	@JoinColumn(name = "user_point_seq")
 	@NotNull
 	@JsonView(Views.DEF.class)

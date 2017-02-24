@@ -12,6 +12,7 @@ public class Address implements Serializable {
 	@JsonView(Views.DEF.class) protected String sido;
 	@JsonView(Views.DEF.class) protected String sigugun;
 	@JsonView(Views.DEF.class) protected String dong;
+	@JsonView(Views.DEF.class) protected String bunji;
 	@JsonView(Views.DEF.class) protected String etc;
 	
 	public Address(){
@@ -20,20 +21,33 @@ public class Address implements Serializable {
 	public String getSido() {
 		return sido;
 	}
+	
 	public void setSido(String sido) {
 		this.sido = sido;
 	}
+	
 	public String getSigugun() {
 		return sigugun;
 	}
+	
 	public void setSigugun(String sigugun) {
 		this.sigugun = sigugun;
 	}
+	
 	public String getDong() {
 		return dong;
 	}
+	
 	public void setDong(String dong) {
 		this.dong = dong;
+	}
+	
+	public String getBunji() {
+		return bunji;
+	}
+
+	public void setBunji(String bunji) {
+		this.bunji = bunji;
 	}
 
 	public String getEtc() {
@@ -46,7 +60,8 @@ public class Address implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Address [sido=" + sido + ", gugun=" + sigugun + ", dongeup=" + dong + ", etc=" + etc + "]";
+		return "Address [sido=" + sido + ", sigugun=" + sigugun + ", dong=" + dong + ", bunji=" + bunji + ", etc=" + etc
+				+ "]";
 	}
 	
 }

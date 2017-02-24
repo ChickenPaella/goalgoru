@@ -21,17 +21,17 @@ public class AddressUtil {
 	 * 머지
 	 * @param sido - 시도 OO도, OO시
 	 * @param sigugun - 시구군 OO시, OO구, OO시 OO구
-	 * @param dong - 동읍면 optional(도로명의 경우 없기도 함)
-	 * @param street - OO길 optional
-	 * @param etc - OO호 optional
+	 * @param dongeupOrStreet - 동읍면 optional(도로명의 경우 없기도 함) OO길
+	 * @param bunji - 번지 O동 O호 or OO-OO
+	 * @param etc - 집 호수 아파트 호수 등등 OO호 optional
 	 * @return merged address
 	 */
-	public static String merge(@NotNull String sido, @NotNull String gugun, String dongeup, String street, String etc){
+	public static String merge(@NotNull String sido, @NotNull String gugun, @NotNull String dongeupOrStreet, @NotNull String bunji, String etc){
 		StringBuilder sb = new StringBuilder();
 		sb.append(sido);
 		sb.append(SEPARATOR).append(gugun);
-		if(dongeup != null) sb.append(SEPARATOR).append(dongeup);
-		if(street != null) sb.append(SEPARATOR).append(street);
+		sb.append(SEPARATOR).append(dongeupOrStreet);
+		sb.append(SEPARATOR).append(bunji);
 		if(etc != null) sb.append(SEPARATOR).append(etc);
 		
 		return sb.toString();

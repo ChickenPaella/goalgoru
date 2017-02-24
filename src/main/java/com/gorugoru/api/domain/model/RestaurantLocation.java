@@ -48,10 +48,13 @@ public class RestaurantLocation implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String dong;
 	
-	@Column
-	@NotNull
+	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
 	private String street;
+	
+	@Column(nullable = true)
+	@JsonView(Views.DEF.class)
+	private String bunji;
 	
 	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
@@ -67,25 +70,31 @@ public class RestaurantLocation implements Serializable{
 	@JsonView(Views.DEF.class)
 	private double longitude;
 	
+	@Column(nullable = true)
+	@JsonView(Views.DEF.class)
+	private int normalize;
+	
 	public RestaurantLocation(){
 	}
 
-	public RestaurantLocation(String sido, String sigugun, String dong, String street, String etc) {
+	public RestaurantLocation(String sido, String sigugun, String dong, String street, String bunji, String etc) {
 		super();
 		this.sido = sido;
 		this.sigugun = sigugun;
 		this.dong = dong;
 		this.street = street;
+		this.bunji = bunji;
 		this.etc = etc;
 	}
 
-	public RestaurantLocation(String sido, String sigugun, String dong, String street, String etc, double latitude,
+	public RestaurantLocation(String sido, String sigugun, String dong, String street, String bunji, String etc, double latitude,
 			double longitude) {
 		super();
 		this.sido = sido;
 		this.sigugun = sigugun;
 		this.dong = dong;
 		this.street = street;
+		this.bunji = bunji;
 		this.etc = etc;
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -139,6 +148,14 @@ public class RestaurantLocation implements Serializable{
 		this.street = street;
 	}
 
+	public String getBunji() {
+		return bunji;
+	}
+
+	public void setBunji(String bunji) {
+		this.bunji = bunji;
+	}
+
 	public String getEtc() {
 		return etc;
 	}
@@ -163,15 +180,27 @@ public class RestaurantLocation implements Serializable{
 		this.longitude = longitude;
 	}
 
-	@Override
-	public String toString() {
-		return "RestaurantLocation [seq=" + seq + ", restaurant=" + restaurant + ", sido=" + sido + ", gugun=" + sigugun
-				+ ", dongeup=" + dong + ", street=" + street + ", etc=" + etc + ", latitude=" + latitude
-				+ ", longitude=" + longitude + "]";
+	public int getNormalize() {
+		return normalize;
 	}
 
-	public String toAddressString() {
-		return AddressUtil.merge(sido, sigugun, dong, street, etc);
+	public void setNormalize(int normalize) {
+		this.normalize = normalize;
+	}
+
+	@Override
+	public String toString() {
+		return "RestaurantLocation [seq=" + seq + ", restaurant=" + restaurant + ", sido=" + sido + ", sigugun="
+				+ sigugun + ", dong=" + dong + ", street=" + street + ", bunji=" + bunji + ", etc=" + etc
+				+ ", latitude=" + latitude + ", longitude=" + longitude + "]";
+	}
+
+	public String toAddressString(boolean includeEtc) {
+		return AddressUtil.merge(sido, sigugun, dong, bunji, includeEtc ? etc : null);
+	}
+	
+	public String toNewAddressString(boolean includeEtc) {
+		return AddressUtil.merge(sido, sigugun, street, bunji, includeEtc ? etc : null);
 	}
 	
 }

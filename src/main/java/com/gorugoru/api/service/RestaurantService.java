@@ -12,6 +12,7 @@ import com.gorugoru.api.domain.model.RestaurantCategory;
 import com.gorugoru.api.domain.model.RestaurantLocation;
 import com.gorugoru.api.domain.repository.RestaurantCategoryRepository;
 import com.gorugoru.api.domain.repository.RestaurantRepository;
+import com.gorugoru.api.dto.Location;
 
 @Service
 public class RestaurantService {
@@ -41,10 +42,10 @@ public class RestaurantService {
 	}
 	
 	public Restaurant insertRestaurant(String dong, String name, String category, String address, String phone,
-			String sido, String gugun, String dongeup, String street, String etc) {
+			String sido, String gugun, String dongeup, String street, String bunji, String etc) {
 		Restaurant restaurant = new Restaurant(dong, name, category, address, phone);
 		restaurant.setCreated(new Date());
-		RestaurantLocation loc = new RestaurantLocation(sido, gugun, dongeup, street, etc);
+		RestaurantLocation loc = new RestaurantLocation(sido, gugun, dongeup, street, bunji, etc);
 		loc.setRestaurant(restaurant);
 		restaurant.setLocation(loc);
 		restaurant = restaurantRepository.save(restaurant);
@@ -61,8 +62,5 @@ public class RestaurantService {
 		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findByDongAndCategoryOrderByNameAsc(dong, cate);
 		return restaurantList;
 	}
-
-	
-
 	
 }

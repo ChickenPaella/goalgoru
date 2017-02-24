@@ -1,9 +1,6 @@
 package com.gorugoru.api.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.domain.model.RestaurantCategory;
+import com.gorugoru.api.dto.Location;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.RestaurantService;
 import com.gorugoru.util.FileUtil;
@@ -49,6 +48,9 @@ public class RestaurantController {
 	
 	@Value(value = "classpath:rsnt_db.txt")
 	private Resource rsntDB;
+	
+	@Autowired
+	DaumLocalComponent daumlocal;
 	
 	/**
 	 * 식당 카테고리 리스트
@@ -85,28 +87,27 @@ public class RestaurantController {
 	 * @param cate
 	 * @return
 	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	@RequestMapping(path = "/{base_address}/{cate}/list", method = RequestMethod.GET)
+	@RequestMapping(path = "/list/{search_dong}/{search_cate}", method = RequestMethod.GET)
 	public ResponseEntity<?> cateList(HttpServletRequest request, ModelMap model,
-			@PathVariable("base_address") String base_address, @PathVariable("cate") String cate) throws IOException {
+			@PathVariable("search_dong") String search_dong, @PathVariable("search_cate") String search_cate) throws IOException, InterruptedException {
 		
 		//TODO 받을 값이 주소 단위 동까지, 음식 카테고리, 음식메뉴 - 해당리스트
-		logger.info("cateList() base_address: "+base_address+" cate: "+cate);
+		logger.info("cateList() search_dong: "+search_dong+" search_cate: "+search_cate);
 		
-		List<Restaurant> rsntList = rsntService.getRestaurantListByDongAndCate("갈현1동", cate);
+		List<Restaurant> rsntList = rsntService.getRestaurantListByDongAndCate(search_dong, search_cate);
 		
 		if(rsntList.isEmpty()){
 			//dummy
 			
 			List<Restaurant> list = FileUtil.loadRsntDBCSV(rsntDB.getFile());
-			
 			for(int i=0;i<list.size();i++){
-				rsntService.insertRestaurant(list.get(i));
+				Restaurant rsnt = list.get(i);
+				rsntService.insertRestaurant(rsnt);
 			}
 			
-			//rsntService.insertRestaurant("갈현1동", "사대명가", "한식", "블라블라", "02-123-1234", "시도", "구군", "동읍", "도로명", "기타");
-			
-			rsntList = rsntService.getRestaurantListByDongAndCate("갈현1동", cate);
+			rsntList = rsntService.getRestaurantListByDongAndCate(search_dong, search_cate);
 		}
 		
         String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);

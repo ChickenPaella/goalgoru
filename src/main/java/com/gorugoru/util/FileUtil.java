@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class FileUtil {
 				line = line.replaceAll("\"", "");
 				
 				// use comma as separator
-				String[] cols = line.split(tsvSplitBy, 12);
+				String[] cols = line.split(tsvSplitBy, 13);
 				logger.info(""+cols.length);
 				for(int i=0;i<cols.length;i++){
 					logger.info(""+cols[i]);
@@ -48,14 +47,15 @@ public class FileUtil {
 				String gugun = cols[6];
 				String dongeup = cols[7];
 				String street = cols[8];
-				String etc = cols[9];
-				String lat = cols[10];//(cols.length > 10) ? cols[10] : "";
-				String lnt = cols[11];//(cols.length > 11) ? cols[11] : "";
+				String bunji = cols[9];
+				String etc = cols[10];
+				String lat = cols[11];//(cols.length > 10) ? cols[10] : "";
+				String lnt = cols[12];//(cols.length > 11) ? cols[11] : "";
 				
 				double lat2 = ("".equals(lat)) ? 0d : Double.parseDouble(lat);
 				double lnt2 = ("".equals(lnt)) ? 0d : Double.parseDouble(lnt);
 				
-				RestaurantLocation location = new RestaurantLocation(sido, gugun, dongeup, street, etc, lat2, lnt2);
+				RestaurantLocation location = new RestaurantLocation(sido, gugun, dongeup, street, bunji, etc, lat2, lnt2);
 				Restaurant rsnt = new Restaurant(dong, name, cate, address, phone, location);
 				location.setRestaurant(rsnt);
 				list.add(rsnt);

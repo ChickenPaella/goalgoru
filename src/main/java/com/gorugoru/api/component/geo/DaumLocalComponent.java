@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gorugoru.api.component.auth.KakaoClient;
 import com.gorugoru.api.component.geo.Coord.Channel.Item;
 import com.gorugoru.api.dto.Address;
 import com.gorugoru.api.dto.Location;
@@ -61,14 +60,20 @@ public class DaumLocalComponent {
 		}
 		
 		if(coord != null && coord.getChannel().getItem().size() > 0){
-			//첫벌째 결과만 사용..
+			//첫번째 결과만 사용..
 			Location loc = new Location();
 			Item item = coord.getChannel().getItem().get(0);
+			
 			logger.info(item.getTitle());
 			loc.setSido(item.getLocalName_1());
 			loc.setSigugun(item.getLocalName_2());
 			loc.setDong(item.getLocalName_3());
+			String bunji = item.getMainAddress();
+			if(item.getSubAddress() != null && !item.getSubAddress().equals("0"))
+				bunji += "-" + item.getSubAddress();
+			loc.setBunji(bunji);
 			//loc.setEtc((String) item.getLocalName_4());
+			loc.setLink("http://map.daum.net/link/map/"+item.getTitle()+","+item.getLat()+","+item.getLng());
 			loc.setLatitude(item.getLat());
 			loc.setLongitude(item.getLng());
 			

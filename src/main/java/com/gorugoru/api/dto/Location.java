@@ -9,6 +9,7 @@ public class Location extends Address {
 	
 	@JsonView(Views.DEF.class) private String latitude;
 	@JsonView(Views.DEF.class) private String longitude;
+	@JsonView(Views.DEF.class) private String link;
 	
 	public Location(){
 		super();
@@ -30,10 +31,18 @@ public class Location extends Address {
 		this.longitude = longitude;
 	}
 
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
 	@Override
 	public String toString() {
-		return "Location [latitude=" + latitude + ", longitude=" + longitude + ", sido=" + sido + ", gugun=" + sigugun
-				+ ", dongeup=" + dong + ", etc=" + etc + "]";
+		return "Location [latitude=" + latitude + ", longitude=" + longitude + ", sido=" + sido + ", sigugun=" + sigugun
+				+ ", dong=" + dong + ", bunji=" + bunji + ", etc=" + etc + "]";
 	}
 	
 }

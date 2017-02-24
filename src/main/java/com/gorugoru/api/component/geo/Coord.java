@@ -108,25 +108,25 @@ public class Coord{
 		public static class Item{
 			
 			private String id;
-			private String zone_no;
-			private String mountain;
-			private String mainAddress;
-			private String subAddress;
+			private String title;//전체 주소
+			private String mountain;//산
+			private String localName_1;//지역명1
+			private String localName_2;//지역명2
+			private String localName_3;//지역명3
+			private String mainAddress;//주 번지
+			private String subAddress;//부 번지
+			private String buildingAddress;//건물 번지
+			private String isNewAddress;//신주소 여부
+			private String newAddress;//신주소
+			private String zipcode;//구우편번호(6자리)
+			private String zone_no;//새우편번호(5자리)
+			private String placeName;
 			private String point_wx;
 			private String point_wy;
-			private String isNewAddress;
-			private String buildingAddress;
-			private String title;
-			private String placeName;
-			private String zipcode;
-			private String newAddress;
-			private String localName_1;
-			private String localName_2;
-			private String localName_3;
-			private String lat;
 			private String point_x;
-			private String lng;
 			private String point_y;
+			private String lat;
+			private String lng;
 			
 			public Item(){
 			}

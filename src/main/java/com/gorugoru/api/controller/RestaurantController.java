@@ -27,12 +27,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gorugoru.api.component.NutriMiner;
 import com.gorugoru.api.component.geo.DaumLocalComponent;
+import com.gorugoru.api.constant.FoodConstants;
+import com.gorugoru.api.constant.JsonResults;
+import com.gorugoru.api.domain.model.FoodNutri;
 import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.domain.model.RestaurantCategory;
 import com.gorugoru.api.domain.model.RestaurantFood;
-import com.gorugoru.api.dto.FoodConstants;
 import com.gorugoru.api.jackson.Views;
+import com.gorugoru.api.service.FoodNutriService;
 import com.gorugoru.api.service.GeoService;
 import com.gorugoru.api.service.RestaurantService;
 import com.gorugoru.util.FileUtil;
@@ -62,6 +66,9 @@ public class RestaurantController {
 	
 	@Autowired
 	GeoService geoService;
+	
+	@Autowired
+	FoodNutriService foodNutriService;
 	
 	/**
 	 * 식당 카테고리 리스트
@@ -108,7 +115,7 @@ public class RestaurantController {
 		
 		String[] addresses = search_address.split(" ");
 		if(addresses.length != 3){
-			return new ResponseEntity<String>("{msg:\"address invalid\"}", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(JsonResults.RESULT_FAIL_INVALID_REQUEST_PARAM, HttpStatus.BAD_REQUEST);
 		}
 		
 		//더미 데이터!!
@@ -159,10 +166,14 @@ public class RestaurantController {
 		
 		long seq = Long.parseLong(rsnt_seq);
 		if(seq <= 0){
-			return new ResponseEntity<String>("{msg:\"seq invalid\"}", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(JsonResults.RESULT_FAIL_INVALID_REQUEST_PARAM, HttpStatus.BAD_REQUEST);
 		}
 		
 		Restaurant restaurant = rsntService.getRestaurant(seq);
+		
+		if(restaurant == null){
+			return new ResponseEntity<String>(JsonResults.RESULT_FAIL_NOT_EXISTS, HttpStatus.BAD_REQUEST);
+		}
 		
 		List<RestaurantFood> foodList = restaurant.getFoods();//rsntService.getRestaurantFoodList(seq);
 		
@@ -173,8 +184,13 @@ public class RestaurantController {
 				Random rand = new Random(System.currentTimeMillis());
 				
 				for(int i=0;i<menuList.length;i++){
+					FoodNutri foodNutri = foodNutriService.getFoodNutriByName(menuList[i]);
+					if(foodNutri == null){
+						logger.info("pre defined food parsing nutri FAIL: "+menuList[i]);
+						continue;
+					}
 					int price = rand.nextInt(3) * 500 + 3000;
-					RestaurantFood food = new RestaurantFood(menuList[i], "고루고루 맛있게 먹어요", price, null);
+					RestaurantFood food = new RestaurantFood(menuList[i], "고루고루 맛있게 먹어요", price, foodNutri.getCalorie(), foodNutri.getMainNutri());
 					food.setRestaurant(restaurant);
 					foodList.add(food);
 				}

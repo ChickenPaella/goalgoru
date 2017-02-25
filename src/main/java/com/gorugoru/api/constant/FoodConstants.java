@@ -1,4 +1,4 @@
-package com.gorugoru.api.dto;
+package com.gorugoru.api.constant;
 
 import java.util.HashMap;
 import java.util.Map;

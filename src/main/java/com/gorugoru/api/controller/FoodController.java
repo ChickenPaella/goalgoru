@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.NutriMiner;
+import com.gorugoru.api.constant.JsonResults;
 import com.gorugoru.api.domain.model.FoodNutri;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.FoodNutriService;
@@ -51,20 +52,7 @@ public class FoodController {
 		
 		FoodNutri foodNutri = foodNutriService.getFoodNutriByName(name);
 		
-		if(foodNutri == null){
-			//파싱
-			NutriMiner mnc = NutriMiner.getInstance();
-			List<FoodNutri> parsedNutriList = mnc.searchAndMine(name, 1);//1개만
-			
-			if(parsedNutriList != null && parsedNutriList.size() > 0){
-				if(parsedNutriList.get(0).getName().equals(name)){
-					//정확히 일치할 경우에만 입력
-					foodNutri = foodNutriService.insertFoodNutri(parsedNutriList.get(0));
-				}
-			}
-		}
-		
-		if(foodNutri == null) return new ResponseEntity<String>("{msg:\"not found\"}", HttpStatus.OK);
+		if(foodNutri == null) return new ResponseEntity<String>(JsonResults.RESULT_FAIL_NOT_FOUND, HttpStatus.BAD_REQUEST);
 		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(foodNutri);
 		

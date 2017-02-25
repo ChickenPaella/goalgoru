@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.geo.DaumLocalComponent;
+import com.gorugoru.api.constant.JsonResults;
 import com.gorugoru.api.dto.Address;
 import com.gorugoru.api.dto.Location;
 import com.gorugoru.api.jackson.Views;
@@ -91,7 +92,7 @@ public class GeoController {
 		List<String> dongList = geoService.getDongList(addr.getSigugun());
 		
 		if(dongList == null){
-			return new ResponseEntity<String>("{result:\"NOT EXIST\"}", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(JsonResults.RESULT_FAIL_NOT_EXISTS, HttpStatus.BAD_REQUEST);
 		}
 		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(dongList);

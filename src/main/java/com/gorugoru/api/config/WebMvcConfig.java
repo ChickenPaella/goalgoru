@@ -39,7 +39,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
 		registry.addMapping("/**")
 			.allowedOrigins("*")
 			.allowedMethods("POST", "GET", "PUT", "DELETE", "OPTIONS")
-			.allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")//, "X-SESSION")
+			.allowedHeaders("Cache-Control", "Pragma", "Origin", "Authorization", "X-Requested-With", "Content-Type", "Accept")//, "X-SESSION")
 			.exposedHeaders("Location")
 			.allowCredentials(true).maxAge(3600);
 	}

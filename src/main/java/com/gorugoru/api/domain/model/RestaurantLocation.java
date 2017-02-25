@@ -71,7 +71,7 @@ public class RestaurantLocation implements Serializable{
 	private double longitude;
 	
 	@Column(nullable = true)
-	@JsonView(Views.DEF.class)
+	@JsonView(Views.MORE.class)
 	private int normalize;
 	
 	public RestaurantLocation(){

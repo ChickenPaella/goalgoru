@@ -89,19 +89,24 @@ public class RestaurantController {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@RequestMapping(path = "/list/{search_dong}/{search_cate}", method = RequestMethod.GET)
+	@RequestMapping(path = "/list/{search_address}/{search_cate}", method = RequestMethod.GET)
 	public ResponseEntity<?> cateList(HttpServletRequest request, ModelMap model,
-			@PathVariable("search_dong") String search_dong, @PathVariable("search_cate") String search_cate) throws IOException, InterruptedException {
+			@PathVariable("search_address") String search_address, @PathVariable("search_cate") String search_cate) throws IOException, InterruptedException {
 		
 		//TODO 받을 값이 주소 단위 동까지, 음식 카테고리, 음식메뉴 - 해당리스트
-		logger.info("cateList() search_dong: "+search_dong+" search_cate: "+search_cate);
+		logger.info("cateList() search_address: "+search_address+" search_cate: "+search_cate);
 		
-		List<Restaurant> rsntList = rsntService.getRestaurantListByDongAndCate(search_dong, search_cate);
+		String[] addresses = search_address.split(" ");
+		if(addresses.length != 3){
+			return new ResponseEntity<String>("{msg:\"address invalid\"}", HttpStatus.BAD_REQUEST);
+		}
 		
-		if(rsntList.isEmpty()){
+		//더미 데이터!!
+		List<Restaurant> list = rsntService.getRestaurantList();
+		if(list.isEmpty()){
 			//dummy
 			
-			List<Restaurant> list = FileUtil.loadRsntDBCSV(rsntDB.getFile());
+			list = FileUtil.loadRsntDBCSV(rsntDB.getFile());
 			for(int i=0;i<list.size();i++){
 				Restaurant rsnt = list.get(i);
 				rsnt = rsntService.insertRestaurant(rsnt);
@@ -109,9 +114,9 @@ public class RestaurantController {
 					Thread.sleep(10000);
 				}
 			}
-			
-			rsntList = rsntService.getRestaurantListByDongAndCate(search_dong, search_cate);
 		}
+
+		List<Restaurant> rsntList = rsntService.getRestaurantListByLocationAndCate(addresses[0], addresses[1], addresses[2], search_cate);
 		
         String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);
 		

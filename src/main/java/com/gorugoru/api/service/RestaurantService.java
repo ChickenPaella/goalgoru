@@ -40,6 +40,7 @@ public class RestaurantService {
 	}
 	
 	public Restaurant insertRestaurant(Restaurant restaurant) {
+		if(restaurant.getLocation() == null) return null;
 		restaurant.setCreated(new Date());
 		restaurant = restaurantRepository.save(restaurant);
 		return restaurant;
@@ -62,8 +63,8 @@ public class RestaurantService {
 		return restaurantList;
 	}
 	
-	public List<Restaurant> getRestaurantListByDongAndCate(String dong, String cate) {
-		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findByDongAndCategoryOrderByNameAsc(dong, cate);
+	public List<Restaurant> getRestaurantListByLocationAndCate(String sido, String sigugun, String dong, String cate) {
+		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findByLocationSidoAndLocationSigugunAndLocationDongAndCategoryOrderByNameAsc(sido, sigugun, dong, cate);
 		return restaurantList;
 	}
 	

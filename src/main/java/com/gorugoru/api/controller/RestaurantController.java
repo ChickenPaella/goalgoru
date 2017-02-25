@@ -1,10 +1,16 @@
 package com.gorugoru.api.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.domain.model.RestaurantCategory;
-import com.gorugoru.api.dto.Location;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.RestaurantService;
 import com.gorugoru.util.FileUtil;
@@ -105,6 +111,15 @@ public class RestaurantController {
 		List<Restaurant> list = rsntService.getRestaurantList();
 		if(list.isEmpty()){
 			//dummy
+			
+			//jar일경우 getFile이 안됨
+			InputStream inputStream = rsntDB.getInputStream();
+			File tsv = File.createTempFile("temp_db", ".txt");
+			try {
+				FileCopyUtils.copy(inputStream, new FileOutputStream(tsv));
+			} finally {
+			    IOUtils.closeQuietly(inputStream);
+			}
 			
 			list = FileUtil.loadRsntDBCSV(rsntDB.getFile());
 			for(int i=0;i<list.size();i++){

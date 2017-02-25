@@ -55,8 +55,10 @@ public class RestaurantService {
 		return restaurant;
 	}
 	
-	public List<Restaurant> getRestaurantListByCoord(String latitude, String longitude) {
+	public List<Restaurant> getRestaurantListByCoord(double latitude, double longitude) {
+		
 		List<Restaurant> restaurantList = restaurantRepository.findByCoord(latitude, longitude);
+
 		return restaurantList;
 	}
 	

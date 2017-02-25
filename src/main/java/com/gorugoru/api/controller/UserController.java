@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -81,10 +82,11 @@ public class UserController {
 	}
 	
 	@RequestMapping(path = "/cardnumber", method = RequestMethod.POST)
-	public ResponseEntity<?> registCardNumber(HttpServletRequest request, @RequestBody User user) {
+	public ResponseEntity<?> registCardNumber(HttpServletRequest request, @RequestParam("user") User user) {
 		logger.info("registCardNumber()");
+		logger.info("user id: " + user.getId());
+		logger.info("user name: " + user.getName());
 		
-		request.getSession().setAttribute("cardNumber", user.getCardNumber());
 		userService.registCardNumber(user);
 		
 		return new ResponseEntity<String>("OK"+user.getCardNumber(),HttpStatus.OK);

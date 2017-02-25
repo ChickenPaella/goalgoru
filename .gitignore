@@ -101,6 +101,8 @@ generated-sources
 ### Properties ###
 database.properties
 package.properties
+application-local.properties
+
 ### Bin ###
 /bin
 

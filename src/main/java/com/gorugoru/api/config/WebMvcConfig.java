@@ -2,6 +2,7 @@ package com.gorugoru.api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -31,5 +32,16 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
         registry.addViewController("/").setViewName("home");
         registry.addViewController("/auth/login").setViewName("login");
     }
+	
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		//System.out.println("addCorsMappings");
+		registry.addMapping("/**")
+			.allowedOrigins("*")
+			.allowedMethods("POST", "GET", "PUT", "DELETE", "OPTIONS")
+			.allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")//, "X-SESSION")
+			.exposedHeaders("Location")
+			.allowCredentials(true).maxAge(3600);
+	}
 	
 }

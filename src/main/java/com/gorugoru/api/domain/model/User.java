@@ -79,6 +79,11 @@ public class User implements Serializable{
 	private String profileImage;
 	
 	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)//for camp LAZY)
+	@Column
+	@JsonView(Views.DEF.class)
+	private String cardNumber;
+	
+	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_point_seq")
 	@NotNull
 	@JsonView(Views.DEF.class)
@@ -97,7 +102,7 @@ public class User implements Serializable{
 	}
 	
 	public User(String authProvider, String authUID, String id, String pass, String name, Date birthDate, String email,
-			String phone, String profileImage) {
+			String phone, String profileImage, String cardNumber) {
 		super();
 		this.authProvider = authProvider;
 		this.authUID = authUID;
@@ -108,6 +113,7 @@ public class User implements Serializable{
 		this.email = email;
 		this.phone = phone;
 		this.profileImage = profileImage;
+		this.cardNumber = cardNumber;
 		this.point = new UserPoint();
 	}
  
@@ -191,6 +197,14 @@ public class User implements Serializable{
 		this.profileImage = profileImage;
 	}
 	
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
 	public UserPoint getPoint() {
 		return point;
 	}
@@ -219,7 +233,7 @@ public class User implements Serializable{
 	public String toString() {
 		return "User [seq=" + seq + ", authProvider=" + authProvider + ", authUID=" + authUID + ", id=" + id + ", pass="
 				+ pass + ", name=" + name + ", birthDate=" + birthDate + ", email=" + email + ", phone=" + phone
-				+ ", profileImage=" + profileImage + ", point=" + point + ", modified=" + modified
+				+ ", profileImage=" + profileImage + ", cardNumber" + cardNumber + ", point=" + point + ", modified=" + modified
 				+ ", created=" + created + "]";
 	}
 	

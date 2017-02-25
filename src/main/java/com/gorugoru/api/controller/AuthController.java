@@ -146,8 +146,9 @@ public class AuthController {
 				logger.info(userProfile.getProperties().getThumbnailImage());
 				
 				//DB저장 or 업데이트
+
 				User newUser = userService.regsistUserForSNS(AuthProvider.KAKAO, String.valueOf(userProfile.getId()),
-						userProfile.getProperties().getNickname(), null, null, null, userProfile.getProperties().getThumbnailImage());
+						userProfile.getProperties().getNickname(), null, null, null, userProfile.getProperties().getThumbnailImage(), null);
 				
 				if(newUser != null && newUser.getSeq() > 0){
 					//성공

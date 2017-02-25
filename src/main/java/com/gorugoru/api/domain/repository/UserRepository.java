@@ -33,4 +33,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	public abstract List<User> findByNameAndBirthDateLessThanSQL(@Param("name") String name, @Param("birth_date") Date birth_date);
  
 	public abstract List<User> findByNameAndBirthDateLessThanOrderByBirthDateDesc(String name, Date birth_date);
+	
 }

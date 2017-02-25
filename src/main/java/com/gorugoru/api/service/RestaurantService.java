@@ -53,9 +53,9 @@ public class RestaurantService {
 		return restaurant;
 	}
 	
-	public Restaurant insertRestaurant(String dong, String name, String category, String address, String phone,
+	public Restaurant insertRestaurant(String dong, String name, String category, String address, String phone, String profileImage, String distance,
 			String sido, String gugun, String dongeup, String street, String bunji, String etc) {
-		Restaurant restaurant = new Restaurant(dong, name, category, address, phone);
+		Restaurant restaurant = new Restaurant(dong, name, category, address, phone, profileImage, distance);
 		restaurant.setCreated(new Date());
 		RestaurantLocation loc = new RestaurantLocation(sido, gugun, dongeup, street, bunji, etc);
 		loc.setRestaurant(restaurant);

@@ -18,6 +18,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Proxy;
+
 import com.fasterxml.jackson.annotation.JsonView;
 import com.gorugoru.api.jackson.Views;
 
@@ -28,6 +30,7 @@ import com.gorugoru.api.jackson.Views;
  */
 @Entity
 @Table(name = "user", uniqueConstraints={@UniqueConstraint(columnNames = {"authProvider", "authUID"})})
+@Proxy(lazy = false)
 public class User implements Serializable{
  
 	private static final long serialVersionUID = 1L;
@@ -82,7 +85,7 @@ public class User implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String cardNumber;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)//for camp LAZY)
 	@JoinColumn(name = "user_point_seq")
 	@NotNull
 	@JsonView(Views.DEF.class)

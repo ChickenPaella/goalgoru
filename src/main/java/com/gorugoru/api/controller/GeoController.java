@@ -1,5 +1,7 @@
 package com.gorugoru.api.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.dto.Address;
 import com.gorugoru.api.dto.Location;
 import com.gorugoru.api.jackson.Views;
+import com.gorugoru.api.service.GeoService;
 
 @RestController
 @RequestMapping(path = "/geo",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -32,6 +35,9 @@ public class GeoController {
 	
 	@Autowired
 	ObjectMapper mapper;
+	
+	@Autowired
+	GeoService geoService;
 	
 	@RequestMapping(path = "/v1/addr2geo/{address}", method = RequestMethod.GET)
 	public ResponseEntity<?> addr2geo(HttpServletRequest request, ModelMap model,
@@ -72,4 +78,43 @@ public class GeoController {
 		return new ResponseEntity<String>(json, HttpStatus.OK);
 	}
 	
+	@RequestMapping(path = "/dong/{latitude},{longitude}", method = RequestMethod.GET)
+	public ResponseEntity<?> dongList(HttpServletRequest req, ModelMap model,
+			@PathVariable("latitude") String latitude, @PathVariable("longitude") String longitude) throws JsonProcessingException{
+		
+		logger.info("dongList latitude: " + latitude + "longitude: " + longitude);
+		
+		Address addr = daumLocalComponent.coord2addr(latitude, longitude);
+		
+		logger.info(addr.toString());
+		
+		List<String> dongList = geoService.getDongList(addr.getSigugun());
+		
+		if(dongList == null){
+			return new ResponseEntity<String>("{result:\"NOT EXIST\"}", HttpStatus.BAD_REQUEST);
+		}
+		
+		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(dongList);
+		
+		return new ResponseEntity<String>(json, HttpStatus.OK);
+	}
+	
+	/**
+	 * 두 위치의 위도 경도 전송 (nowlat, nowlng, setlat, setlng)
+	 */
+	@RequestMapping(path = "/distance/{nowLat},{nowLng},{setLat},{setLng}")
+	public ResponseEntity<?> getDistance(HttpServletRequest req, ModelMap model,
+			@PathVariable("nowLat") String nowLat, 
+			@PathVariable("nowLng") String nowLng,
+			@PathVariable("setLat") String setLat, 
+			@PathVariable("setLng") String setLng
+			) throws JsonProcessingException {
+		
+		logger.info("getDistance nowLat: " + nowLat + "nowLng: " + nowLng + "setLat: " + setLat + "setLng: " + setLng);
+
+		double distance = geoService.getDistanceBetweenRestaurant(Double.valueOf(nowLat).doubleValue(),Double.valueOf(nowLng).doubleValue(),Double.valueOf(setLat).doubleValue(),Double.valueOf(setLng).doubleValue());
+		
+		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(distance);
+		return new ResponseEntity<String>(json, HttpStatus.OK);
+	}
 }

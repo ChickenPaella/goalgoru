@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -74,9 +75,19 @@ public class UserController {
 		cal.set(thisYear - age + 1, 0, 1);
 		String date = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 		
-		User user = userService.registUser(AuthProvider.NONE, "", "id", "pass", "name", date, "email", "phone", "profile");
+		User user = userService.registUser(AuthProvider.NONE, "", "id", "pass", "name", date, "email", "phone", "profile", "cardNumber");
 		
 		return new ResponseEntity<String>("OK "+user.getSeq(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/cardnumber", method = RequestMethod.POST)
+	public ResponseEntity<?> registCardNumber(HttpServletRequest request, @RequestBody User user) {
+		logger.info("registCardNumber()");
+		
+		request.getSession().setAttribute("cardNumber", user.getCardNumber());
+		userService.registCardNumber(user);
+		
+		return new ResponseEntity<String>("OK"+user.getCardNumber(),HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/list", method = RequestMethod.GET)
@@ -102,5 +113,6 @@ public class UserController {
 		
 		return new ResponseEntity<List<User>>(userList, HttpStatus.OK);
 	}
+	
 	
 }

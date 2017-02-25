@@ -11,6 +11,7 @@ import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.domain.model.RestaurantCategory;
 import com.gorugoru.api.domain.model.RestaurantLocation;
 import com.gorugoru.api.domain.repository.RestaurantCategoryRepository;
+import com.gorugoru.api.domain.repository.RestaurantLocationRepository;
 import com.gorugoru.api.domain.repository.RestaurantRepository;
 
 @Service
@@ -18,6 +19,9 @@ public class RestaurantService {
 	
 	@Autowired
 	RestaurantCategoryRepository restaurantCategoryRepository;
+	
+	@Autowired
+	RestaurantLocationRepository restaurantLocationRepository;
 	
 	@Autowired
 	RestaurantRepository restaurantRepository;
@@ -51,6 +55,11 @@ public class RestaurantService {
 		return restaurant;
 	}
 	
+	public List<Restaurant> getRestaurantListByCoord(String latitude, String longitude) {
+		List<Restaurant> restaurantList = restaurantRepository.findByCoord(latitude, longitude);
+		return restaurantList;
+	}
+	
 	public List<Restaurant> getRestaurantList() {
 		Sort sort = new Sort(Sort.Direction.ASC, "name");
 		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findAll(sort);
@@ -62,7 +71,4 @@ public class RestaurantService {
 		return restaurantList;
 	}
 
-	
-
-	
 }

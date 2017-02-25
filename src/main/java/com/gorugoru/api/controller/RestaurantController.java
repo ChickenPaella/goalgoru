@@ -113,4 +113,15 @@ public class RestaurantController {
 		
 		return new ResponseEntity<String>(json, HttpStatus.OK);
 	}
+	
+	@RequestMapping(path="/list/{latitude},{longitude}", method = RequestMethod.GET)
+	public ResponseEntity<?> distList(HttpServletRequest request, ModelMap model,
+			@PathVariable("latitude") String latitude, @PathVariable("longitude") String longitude) throws IOException {
+		
+		List<Restaurant> rsntList = rsntService.getRestaurantListByCoord(latitude, longitude);
+		
+		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);
+		
+		return new ResponseEntity<String>(json, HttpStatus.OK);
+	}
 }

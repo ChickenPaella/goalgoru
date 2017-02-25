@@ -139,7 +139,7 @@ public class AuthController {
 				
 				//DB저장 or 업데이트
 				User newUser = userService.regsistUserForSNS(AuthProvider.KAKAO, String.valueOf(user.getId()),
-						user.getProperties().getNickname(), null, null, null, user.getProperties().getThumbnailImage());
+						user.getProperties().getNickname(), null, null, null, user.getProperties().getThumbnailImage(), null);
 				
 				if(newUser != null && newUser.getSeq() > 0){
 					//성공

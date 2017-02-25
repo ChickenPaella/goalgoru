@@ -1,5 +1,7 @@
 package com.gorugoru.api.controller;
 
+import java.net.URI;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -175,6 +177,14 @@ public class AuthController {
 		
 		if(referer == null){
 			referer = "";
+		}else{
+			URI uri = new URI(referer);
+			String appHost = uri.getScheme()+"://"+uri.getHost()+":"+uri.getPort();
+			appHost += "/api/session/"+request.getRequestedSessionId();
+			
+			logger.info("appHost: "+appHost);
+			
+			return "redirect:".concat(appHost);
 		}
 		
 		return "redirect:".concat(referer);

@@ -2,6 +2,7 @@ package com.gorugoru.api.domain.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,17 +11,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Proxy;
+
 import com.fasterxml.jackson.annotation.JsonView;
 import com.gorugoru.api.jackson.Views;
 
 @Entity
 @Table(name = "restaurant")
+@Proxy(lazy = false)
 public class Restaurant implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -59,6 +64,11 @@ public class Restaurant implements Serializable{
 	@NotNull
 	@JsonView(Views.DEF.class)
 	private RestaurantLocation location;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)//for camp LAZY) //EAGER not working
+	@NotNull
+	@JsonView(Views.MORE.class)
+	private List<RestaurantFood> foods;
 	
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -145,6 +155,14 @@ public class Restaurant implements Serializable{
 
 	public void setLocation(RestaurantLocation location) {
 		this.location = location;
+	}
+
+	public List<RestaurantFood> getFoods() {
+		return foods;
+	}
+
+	public void setFoods(List<RestaurantFood> foods) {
+		this.foods = foods;
 	}
 
 	public Date getModified() {

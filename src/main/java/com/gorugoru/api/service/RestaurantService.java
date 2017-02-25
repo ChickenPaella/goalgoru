@@ -3,6 +3,8 @@ package com.gorugoru.api.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.domain.model.RestaurantCategory;
+import com.gorugoru.api.domain.model.RestaurantFood;
 import com.gorugoru.api.domain.model.RestaurantLocation;
 import com.gorugoru.api.domain.repository.RestaurantCategoryRepository;
 import com.gorugoru.api.domain.repository.RestaurantRepository;
@@ -68,6 +71,10 @@ public class RestaurantService {
 		return restaurantList;
 	}
 	
+	public Restaurant getRestaurant(long seq) {
+		return restaurantRepository.getOne(seq);
+	}
+	
 	public boolean normalizeLocation(Restaurant rsnt) {
 		if(rsnt.getLocation().getNormalize() == 0){
 			if(rsnt.getLocation().getLatitude() == 0d && rsnt.getLocation().getLongitude() == 0d){
@@ -87,6 +94,15 @@ public class RestaurantService {
 		}
 		
 		return false;
+	}
+	
+	@Transactional
+	public List<RestaurantFood> getRestaurantFoodList(long seq) {
+		Restaurant restaurant = restaurantRepository.getOne(seq);
+		if(restaurant != null){
+			return restaurant.getFoods();
+		}
+		return null;
 	}
 	
 }

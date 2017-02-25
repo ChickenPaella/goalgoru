@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.domain.model.RestaurantCategory;
+import com.gorugoru.api.domain.model.RestaurantFood;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.RestaurantService;
 import com.gorugoru.util.FileUtil;
@@ -134,6 +135,40 @@ public class RestaurantController {
 		List<Restaurant> rsntList = rsntService.getRestaurantListByLocationAndCate(addresses[0], addresses[1], addresses[2], search_cate);
 		
         String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);
+		
+		return new ResponseEntity<String>(json, HttpStatus.OK);
+	}
+	
+	/**
+	 * 식당 상세보기
+	 * @param request
+	 * @param model
+	 * @param rsnt_seq
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	@RequestMapping(path = "/view/{rsnt_seq}", method = RequestMethod.GET)
+	public ResponseEntity<?> view(HttpServletRequest request, ModelMap model,
+			@PathVariable("rsnt_seq") String rsnt_seq) throws IOException, InterruptedException {
+		
+		logger.info("view() rsnt_seq: "+rsnt_seq);
+		
+		long seq = Long.parseLong(rsnt_seq);
+		if(seq <= 0){
+			return new ResponseEntity<String>("{msg:\"seq invalid\"}", HttpStatus.BAD_REQUEST);
+		}
+		
+		Restaurant restaurant = rsntService.getRestaurant(seq);
+		
+		List<RestaurantFood> foodList = restaurant.getFoods();//rsntService.getRestaurantFoodList(seq);
+		
+		//더미
+		if(foodList.isEmpty()){
+			foodList.add(new RestaurantFood());
+		}
+		
+        String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(foodList);
 		
 		return new ResponseEntity<String>(json, HttpStatus.OK);
 	}

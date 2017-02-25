@@ -1,9 +1,5 @@
 package com.gorugoru.api.component;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -142,23 +138,23 @@ public class NutriMiner {
     			//설탕당row가 있음
     			row_idx++;
     		}
-    		assertThat("단백질", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
+    		//assertThat("단백질", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
     		fn.setProtein(Float.parseFloat(nutpanel_rows.eq(row_idx).select("td").eq(1).text().replace("g", "").trim()));
     		row_idx++;
-    		assertThat("지방", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
+    		//assertThat("지방", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
     		fn.setFat(Float.parseFloat(nutpanel_rows.eq(row_idx).select("td").eq(1).text().replace("g", "").trim()));
     		row_idx+=4;//+1 +3줄 더
-    		assertThat("콜레스테롤", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
+    		//assertThat("콜레스테롤", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
     		fn.setCholes(Float.parseFloat(nutpanel_rows.eq(row_idx).select("td").eq(1).text().replace("mg", "").trim()));
     		row_idx++;
     		if("식이섬유".equals(nutpanel_rows.eq(row_idx).select("td").eq(0).text())){//optional
     			fn.setFiber(Float.parseFloat(nutpanel_rows.eq(row_idx).select("td").eq(1).text().replace("g", "").trim()));
         		row_idx++;
     		}
-    		assertThat("나트륨", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
+    		//assertThat("나트륨", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
     		fn.setNatrium(Float.parseFloat(nutpanel_rows.eq(row_idx).select("td").eq(1).text().replace("mg", "").trim()));
     		row_idx++;
-    		assertThat("칼륨", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
+    		//assertThat("칼륨", is(equalTo(nutpanel_rows.eq(row_idx).select("td").eq(0).text())));
     		fn.setKalium(Float.parseFloat(nutpanel_rows.eq(row_idx).select("td").eq(1).text().replace("mg", "").trim()));
     		
     		//칼로리 분석

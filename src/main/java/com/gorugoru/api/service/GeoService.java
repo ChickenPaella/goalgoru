@@ -38,6 +38,6 @@ public class GeoService {
 	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 	    float dist = (float) (earthRadius * c);
 
-	    return 0.001 * dist;
+	    return dist;
 	}
 }

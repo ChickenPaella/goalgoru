@@ -99,9 +99,6 @@ public class GeoController {
 		return new ResponseEntity<String>(json, HttpStatus.OK);
 	}
 	
-	/**
-	 * 두 위치의 위도 경도 전송 (nowlat, nowlng, setlat, setlng)
-	 */
 	@RequestMapping(path = "/distance/{nowLat},{nowLng},{setLat},{setLng}")
 	public ResponseEntity<?> getDistance(HttpServletRequest req, ModelMap model,
 			@PathVariable("nowLat") String nowLat, 

@@ -118,9 +118,14 @@ public class UserService implements UserDetailsService{
 		return user;
 	}
 	
-	public User registCardNumber(User user) {
-		user=userRepository.save(user);
-		return user;
+	public User registCardNumber(User user, String cardNumber) {
+		if(user.getCardNumber()==null){
+			user.setCardNumber(cardNumber);
+			user=userRepository.save(user);
+			return user;
+		}
+		else return user;
+		
 	}
 	
 	public List<User> getUserList(){

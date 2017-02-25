@@ -121,7 +121,7 @@ public class RestaurantController {
 			    IOUtils.closeQuietly(inputStream);
 			}
 			
-			list = FileUtil.loadRsntDBCSV(rsntDB.getFile());
+			list = FileUtil.loadRsntDBCSV(tsv);
 			for(int i=0;i<list.size();i++){
 				Restaurant rsnt = list.get(i);
 				rsnt = rsntService.insertRestaurant(rsnt);

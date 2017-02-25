@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -183,13 +184,14 @@ public class RestaurantController {
 		
 		List<Restaurant> rsntList = rsntService.getRestaurantListByCoord(Double.valueOf(latitude).doubleValue(), Double.valueOf(longitude).doubleValue());
 		
-		while(rsntList.iterator().hasNext()) 
-		{
-			rsntList.iterator().next().setDistance(geoService.getDistanceBetweenRestaurant(Double.valueOf(latitude).doubleValue(), 
+		rsntList.forEach((input) -> {
+			input.getLocation().getLatitude();
+			input.getLocation().getLongitude();
+			input.setDistance(geoService.getDistanceBetweenRestaurant(Double.valueOf(latitude).doubleValue(), 
 					Double.valueOf(longitude).doubleValue(),
-					rsntList.iterator().next().getLocation().getLatitude(), 
-					rsntList.iterator().next().getLocation().getLongitude()));
-		}
+					input.getLocation().getLatitude(), 
+					input.getLocation().getLongitude()));
+		});
 		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);
 		

@@ -78,8 +78,7 @@ public class User implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String profileImage;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)//for camp LAZY)
-	@Column
+	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
 	private String cardNumber;
 	

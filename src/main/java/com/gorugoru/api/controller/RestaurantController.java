@@ -104,7 +104,10 @@ public class RestaurantController {
 			List<Restaurant> list = FileUtil.loadRsntDBCSV(rsntDB.getFile());
 			for(int i=0;i<list.size();i++){
 				Restaurant rsnt = list.get(i);
-				rsntService.insertRestaurant(rsnt);
+				rsnt = rsntService.insertRestaurant(rsnt);
+				if(rsntService.normalizeLocation(rsnt)){
+					Thread.sleep(10000);
+				}
 			}
 			
 			rsntList = rsntService.getRestaurantListByDongAndCate(search_dong, search_cate);

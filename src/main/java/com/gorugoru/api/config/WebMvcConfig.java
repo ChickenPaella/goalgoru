@@ -33,15 +33,16 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
         registry.addViewController("/auth/login").setViewName("login");
     }
 	
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		//System.out.println("addCorsMappings");
-		registry.addMapping("/**")
-			.allowedOrigins("*")
-			.allowedMethods("POST", "GET", "PUT", "DELETE", "OPTIONS")
-			.allowedHeaders("Cache-Control", "Pragma", "Origin", "Authorization", "X-Requested-With", "Content-Type", "Accept")//, "X-SESSION")
-			.exposedHeaders("Location")
-			.allowCredentials(true).maxAge(3600);
-	}
+	//CORSFilter와 중복
+//	@Override
+//	public void addCorsMappings(CorsRegistry registry) {
+//		//System.out.println("addCorsMappings");
+//		registry.addMapping("/**")
+//			.allowedOrigins("*")
+//			.allowedMethods("POST", "GET", "PUT", "DELETE", "OPTIONS")
+//			.allowedHeaders("Cache-Control", "Pragma", "Origin", "Authorization", "X-Requested-With", "Content-Type", "Accept")
+//			.exposedHeaders("Location")
+//			.allowCredentials(true).maxAge(3600);
+//	}
 	
 }

@@ -1,6 +1,7 @@
 package com.gorugoru.api.controller;
 
 import java.net.URI;
+import java.net.URLEncoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,9 @@ import com.gorugoru.api.component.auth.KakaoLoginComponent;
 import com.gorugoru.api.component.auth.KakaoLoginComponent.Token;
 import com.gorugoru.api.component.auth.KakaoLoginComponent.UserProfile;
 import com.gorugoru.api.domain.model.User;
+import com.gorugoru.api.dto.SecUser;
+import com.gorugoru.api.jwt.TokenAuthenticationService;
+import com.gorugoru.api.jwt.UserAuthentication;
 import com.gorugoru.api.service.UserService;
 
 /**
@@ -49,6 +53,9 @@ public class AuthController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	TokenAuthenticationService tokenAuthenticationService;
 	
 	/**
 	 * 카카오 로그인 요청
@@ -153,6 +160,7 @@ public class AuthController {
 				if(newUser != null && newUser.getSeq() > 0){
 					//성공
 					// Security Login
+					/*
 		            final SecurityContext securityContext = SecurityContextHolder.getContext();
 		            final String principal = AuthProvider.KAKAO.toString()+"-"+newUser.getAuthUID();
 					final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -162,6 +170,12 @@ public class AuthController {
 					securityContext.setAuthentication(authentication);
 					SecurityContextHolder.setContext(securityContext);
 					session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+					*/
+					
+					// state less jwt
+					final String principal = "-temp-"+AuthProvider.KAKAO.toString()+"-"+newUser.getAuthUID();
+					UserAuthentication authentication = new UserAuthentication(new SecUser(principal, "null", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")));
+					tokenAuthenticationService.addAuthentication(response, authentication);
 					
 					//토큰재사용 쿠키
 					Token token = (Token) session.getAttribute(AuthAttr.KAKAO_TOKEN);
@@ -179,9 +193,13 @@ public class AuthController {
 		if(referer == null){
 			referer = "";
 		}else{
+			logger.info("referer: "+referer);
+			
+			String jwt = response.getHeader(TokenAuthenticationService.AUTH_HEADER_NAME);
+			
 			URI uri = new URI(referer);
 			String appHost = uri.getScheme()+"://"+uri.getHost()+":"+uri.getPort();
-			appHost += "/api/session/"+request.getRequestedSessionId();
+			appHost += "/api/session/"+jwt;
 			
 			logger.info("appHost: "+appHost);
 			

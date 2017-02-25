@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,6 +30,8 @@ import com.gorugoru.util.DateUtil;
 public class UserService implements UserDetailsService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	
+	private final AccountStatusUserDetailsChecker detailsChecker = new AccountStatusUserDetailsChecker();
 	
 	@Autowired
 	ObjectMapper mapper;
@@ -196,14 +199,14 @@ public class UserService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
 		User user = getUserById(username);
 		
 		if (user != null) {
-			SecUser securityUser = new SecUser(user.getId(), user.getPass(), AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+			SecUser securityUser = new SecUser(user.getId(), "null", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+			detailsChecker.check(securityUser);
 			return securityUser;
         } else {
-            throw new UsernameNotFoundException("No user with username '" + username + "' found!");
+            throw new UsernameNotFoundException("user with username '" + username + "' not found!");
         }
 	}
 }

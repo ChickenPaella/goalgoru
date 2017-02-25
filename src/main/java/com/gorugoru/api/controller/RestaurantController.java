@@ -4,12 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,7 @@ import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.domain.model.RestaurantCategory;
 import com.gorugoru.api.domain.model.RestaurantFood;
+import com.gorugoru.api.dto.FoodConstants;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.RestaurantService;
 import com.gorugoru.util.FileUtil;
@@ -74,10 +74,9 @@ public class RestaurantController {
 		
 		if(rsntCateList.isEmpty()){
 			//dummy
-			rsntService.insertCategory("한식");
-			rsntService.insertCategory("중식");
-			rsntService.insertCategory("양식");
-			rsntService.insertCategory("기타");
+			for(int i=0;i<FoodConstants.FOOD_CATEGORY.length;i++){
+				rsntService.insertCategory(FoodConstants.FOOD_CATEGORY[0]);
+			}
 			
 			rsntCateList = rsntService.getCategoryList();
 		}
@@ -165,19 +164,50 @@ public class RestaurantController {
 		
 		//더미
 		if(foodList.isEmpty()){
-			foodList.add(new RestaurantFood());
+			String menuList[] = FoodConstants.getMenuList(restaurant.getCategory());
+			if(menuList != null){
+				Random rand = new Random(System.currentTimeMillis());
+				
+				for(int i=0;i<menuList.length;i++){
+					int price = rand.nextInt(3) * 500 + 3000;
+					RestaurantFood food = new RestaurantFood(menuList[i], "고루고루 맛있게 먹어요", price, null);
+					food.setRestaurant(restaurant);
+					foodList.add(food);
+				}
+				restaurant.setFoods(foodList);
+				rsntService.insertRestaurant(restaurant);
+			}
 		}
 		
-        String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(foodList);
+        String json = mapper.writerWithView(Views.MORE.class).writeValueAsString(restaurant);
         
         return new ResponseEntity<String>(json, HttpStatus.OK);
 	}
 
-	@RequestMapping(path="/list/{latitude},{longitude}", method = RequestMethod.GET)
+	@RequestMapping(path="/list/geo/{latitude},{longitude}", method = RequestMethod.GET)
 	public ResponseEntity<?> distanceList(HttpServletRequest request, ModelMap model,
 			@PathVariable("latitude") String latitude, @PathVariable("longitude") String longitude) throws IOException {
 		
 		List<Restaurant> rsntList = rsntService.getRestaurantListByCoord(Double.valueOf(latitude).doubleValue(), Double.valueOf(longitude).doubleValue());
+		
+		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);
+		
+		return new ResponseEntity<String>(json, HttpStatus.OK);
+	}
+	
+	/**
+	 * 음식으로 식당 검색
+	 * @param request
+	 * @param model
+	 * @param name
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(path="/list/food/{name}", method = RequestMethod.GET)
+	public ResponseEntity<?> distanceList(HttpServletRequest request, ModelMap model,
+			@PathVariable("name") String name) throws IOException {
+		
+		List<Restaurant> rsntList = rsntService.getRestaurantListByFoodsName(name);
 		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);
 		

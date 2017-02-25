@@ -1,6 +1,9 @@
 package com.gorugoru.api.domain.model;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonView;
+import com.gorugoru.api.jackson.Views;
 
 /**
  * 음식 칼로리 영양소 crawled by https://www.fatsecret.kr
@@ -24,62 +30,77 @@ public class FoodNutri implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@JsonView(Views.DEF.class)
 	private long seq;
 	
-	@Column
+	@Column(unique = true)
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private String name;
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private String servingSize;
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private int calorie;//kcal
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private float carbo;//탄수화물 g
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private int carboPercent;//%
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private float protein;//단백질 g
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private int proteinPercent;//%
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private float fat;//지방 g
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private int fatPercent;//%
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private float choles;//콜레스테롤 mg
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private float fiber;//g
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private float natrium;//나트륨 mg
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private float kalium;//칼륨 mg
 	
 	@Column
 	@NotNull
+	@JsonView(Views.DEF.class)
 	private String originalUrl;
 	
 	public FoodNutri(){
@@ -203,6 +224,21 @@ public class FoodNutri implements Serializable{
 
 	public void setOriginalUrl(String originalUrl) {
 		this.originalUrl = originalUrl;
+	}
+
+	public Nutri getMainNutri() {
+		
+		List<Integer> lll = new LinkedList<Integer>();
+		lll.add(this.carboPercent);
+		lll.add(this.proteinPercent);
+		lll.add(this.fatPercent);
+		Collections.sort(lll);
+		int maxVal = lll.get(lll.size()-1);
+		if(this.carboPercent == maxVal) return Nutri.Carbohydrate;
+		else if(this.proteinPercent == maxVal) return Nutri.Protein;
+		else if(this.fatPercent == maxVal) return Nutri.Fat;
+		
+		return null;
 	}
 	
 }

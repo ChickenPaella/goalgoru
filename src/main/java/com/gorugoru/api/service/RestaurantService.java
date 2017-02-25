@@ -81,7 +81,11 @@ public class RestaurantService {
 		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findByLocationSidoAndLocationSigugunAndLocationDongAndCategoryOrderByNameAsc(sido, sigugun, dong, cate);
 		return restaurantList;
 	}
-
+	
+	public List<Restaurant> getRestaurantListByFoodsName(String name) {
+		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findByFoodsName(name);
+		return restaurantList;
+	}
 	
 	public Restaurant getRestaurant(long seq) {
 		return restaurantRepository.getOne(seq);

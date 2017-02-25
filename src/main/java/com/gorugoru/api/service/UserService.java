@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.auth.AuthProvider;
-import com.gorugoru.api.domain.model.Food;
+import com.gorugoru.api.domain.model.FoodNutri;
 import com.gorugoru.api.domain.model.Nutri;
 import com.gorugoru.api.domain.model.User;
-import com.gorugoru.api.domain.repository.FoodRepository;
+import com.gorugoru.api.domain.repository.FoodNutriRepository;
 import com.gorugoru.api.domain.repository.UserRepository;
 import com.gorugoru.api.dto.SecUser;
 import com.gorugoru.util.DateUtil;
@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService{
 	UserRepository userRepository;
 	
 	@Autowired
-	FoodRepository foodRepository;
+	FoodNutriRepository foodNutriRepository;
 	
 	/**
 	 * 사용자등록 소셜로그인용
@@ -133,9 +133,11 @@ public class UserService implements UserDetailsService{
 		logger.info("managePoint()");
 		
 		User user = userRepository.findOneById(userId);
-		Food food = foodRepository.findOneByName(foodName);
+		FoodNutri food = foodNutriRepository.findOneByName(foodName);//FOOD 맵핑
 		
-		if(food.getMainNutri()==Nutri.Carbohydrate ) {
+		Nutri mainNutri = food.getMainNutri();
+		
+		if(mainNutri==Nutri.Carbohydrate ) {
 			if(user.getPoint().getBadgeCarbo()<3) {
 				user.getPoint().setBadgeCarbo(user.getPoint().getBadgeCarbo()+1);
 			}
@@ -145,7 +147,7 @@ public class UserService implements UserDetailsService{
 				return user;
 			}
 		}
-		else if(food.getMainNutri()==Nutri.Protein) {
+		else if(mainNutri==Nutri.Protein) {
 			if(user.getPoint().getBadgeProtein()<3) {
 				user.getPoint().setBadgeProtein(user.getPoint().getBadgeProtein()+1);
 			}
@@ -155,7 +157,7 @@ public class UserService implements UserDetailsService{
 				return user;
 			}	
 		} 
-		else if(food.getMainNutri()==Nutri.Fat) {
+		else if(mainNutri==Nutri.Fat) {
 			if(user.getPoint().getBadgeFat()<3) {
 				user.getPoint().setBadgeFat(user.getPoint().getBadgeFat()+1);
 			}

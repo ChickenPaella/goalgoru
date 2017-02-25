@@ -39,6 +39,10 @@ public class NutriMiner {
 	}
 	
 	public List<FoodNutri> searchAndMine(String keyword){
+		return searchAndMine(keyword, 0);
+	}
+	
+	public List<FoodNutri> searchAndMine(String keyword, int limit){
 		final String url = UriComponentsBuilder.newInstance().scheme("https").host("www.fatsecret.kr")
 				.path("/칼로리-영양소/search")
 				.queryParam("q", keyword)
@@ -61,6 +65,7 @@ public class NutriMiner {
     		Elements searchResultA = doc.select("body a.prominent");
     		if(searchResultA.isEmpty()){
     			//검색결과없음
+    			return null;
     		}else{
     			for (Element a : searchResultA) {
     				String path = a.attr("href");
@@ -69,6 +74,7 @@ public class NutriMiner {
     					FoodNutri fn = mineUrl("https://www.fatsecret.kr".concat(path));
     					if(fn == null) continue;
     					result.add(fn);
+    					if(limit > 0 && limit == result.size()) break;
     				}	
     			}
     		}
@@ -146,11 +152,11 @@ public class NutriMiner {
     		
     		int s;
 			s = factString.indexOf("탄수화물")+"탄수화물 (".length();
-			fn.setCarboPercent(Integer.parseInt(factString.substring(s, s + 2)));
+			fn.setCarboPercent(Integer.parseInt(factString.substring(s, s + 2).replace("%", "")));
 			s = factString.indexOf("단백질")+"단백질 (".length();
-			fn.setProteinPercent(Integer.parseInt(factString.substring(s, s + 2)));
+			fn.setProteinPercent(Integer.parseInt(factString.substring(s, s + 2).replace("%", "")));
 			s = factString.indexOf("지방")+"지방 (".length();
-			fn.setFatPercent(Integer.parseInt(factString.substring(s, s + 2)));
+			fn.setFatPercent(Integer.parseInt(factString.substring(s, s + 2).replace("%", "")));
 			
 			return fn;
 		} catch (IOException e1) {

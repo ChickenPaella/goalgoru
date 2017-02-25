@@ -47,23 +47,18 @@ public class RestaurantFood implements Serializable{
 	
 	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
-	private String nutri;
+	private Nutri mainNutri;
 	
 	public RestaurantFood(){
 	}
-	
-	
 
-	public RestaurantFood(Restaurant restaurant, String name, String description, int price, String nutri) {
+	public RestaurantFood(String name, String description, int price, Nutri mainNutri) {
 		super();
-		this.restaurant = restaurant;
 		this.name = name;
 		this.description = description;
 		this.price = price;
-		this.nutri = nutri;
+		this.mainNutri = mainNutri;
 	}
-
-
 
 	public long getSeq() {
 		return seq;
@@ -105,12 +100,12 @@ public class RestaurantFood implements Serializable{
 		this.price = price;
 	}
 
-	public String getNutri() {
-		return nutri;
+	public Nutri getMainNutri() {
+		return mainNutri;
 	}
 
-	public void setNutri(String nutri) {
-		this.nutri = nutri;
+	public void setMainNutri(Nutri mainNutri) {
+		this.mainNutri = mainNutri;
 	}
 	
 }

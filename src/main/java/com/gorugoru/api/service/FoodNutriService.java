@@ -1,7 +1,5 @@
 package com.gorugoru.api.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +17,7 @@ public class FoodNutriService {
 		return foodNutri;
 	}
 	
-	public List<FoodNutri> getUserList(){
-		List<FoodNutri> list = (List<FoodNutri>) foodNutriRepository.findAll();
-		return list;
+	public FoodNutri getFoodNutriByName(String name){
+		return foodNutriRepository.findOneByName(name);
 	}
 }

@@ -1,5 +1,7 @@
 package com.gorugoru.api.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -16,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gorugoru.api.component.NutriMiner;
+import com.gorugoru.api.domain.model.FoodNutri;
+import com.gorugoru.api.jackson.Views;
+import com.gorugoru.api.service.FoodNutriService;
 
 @RestController
 @RequestMapping(path = "/food",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -26,13 +32,41 @@ public class FoodController {
 	@Autowired
 	ObjectMapper mapper;
 	
-	@RequestMapping(path = "/v1/food/nutri/{name}", method = RequestMethod.GET)
+	@Autowired
+	FoodNutriService foodNutriService;
+	
+	/**
+	 * 음식 영양소 정보(음식 상세보기) db조회후 없으면 fatsecret사이트 파싱
+	 * @param request
+	 * @param model
+	 * @param name
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(path = "/nutri/{name}", method = RequestMethod.GET)
 	public ResponseEntity<?> nutri(HttpServletRequest request, ModelMap model,
 			@PathVariable("name") String name) throws JsonProcessingException {
 		
-		logger.info("nutri()");
+		logger.info("nutri() name: "+name);
 		
-		String json = "";//mapper.writerWithView(Views.DEF.class).writeValueAsString(loc);
+		FoodNutri foodNutri = foodNutriService.getFoodNutriByName(name);
+		
+		if(foodNutri == null){
+			//파싱
+			NutriMiner mnc = NutriMiner.getInstance();
+			List<FoodNutri> parsedNutriList = mnc.searchAndMine(name, 1);//1개만
+			
+			if(parsedNutriList != null && parsedNutriList.size() > 0){
+				if(parsedNutriList.get(0).getName().equals(name)){
+					//정확히 일치할 경우에만 입력
+					foodNutri = foodNutriService.insertFoodNutri(parsedNutriList.get(0));
+				}
+			}
+		}
+		
+		if(foodNutri == null) return new ResponseEntity<String>("{msg:\"not found\"}", HttpStatus.OK);
+		
+		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(foodNutri);
 		
 		return new ResponseEntity<String>(json, HttpStatus.OK);
 	}

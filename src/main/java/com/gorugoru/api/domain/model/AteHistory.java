@@ -1,6 +1,7 @@
 package com.gorugoru.api.domain.model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,10 +30,15 @@ public class AteHistory implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String userId;
 	
-	@Column
+	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NOW()")
 	@NotNull
 	@JsonView(Views.DEF.class)
-	private String date;
+	private Date eatDate;
+	
+	@Column(nullable = false, updatable = true, columnDefinition = "DATETIME DEFAULT NOW()")
+	@NotNull
+	@JsonView(Views.DEF.class)
+	private Date receiptDate;
 	
 	@Column
 	@NotNull
@@ -49,17 +55,23 @@ public class AteHistory implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String foodName;
 	
+	@Column(nullable = false)
+	@JsonView(Views.DEF.class)
+	private boolean isAte;
+	
 	public AteHistory() {
 		
 	}
 
-	public AteHistory(String userId, String date, String receiptNumber, String restaurantName, String foodName) {
+	public AteHistory(String userId, Date eatDate, Date receiptDate, String receiptNumber, String restaurantName, String foodName, boolean isAte) {
 		super();
 		this.userId = userId;
-		this.date = date;
+		this.eatDate = eatDate;
+		this.receiptDate = receiptDate;
 		this.receiptNumber = receiptNumber;
 		this.restaurantName = restaurantName;
 		this.foodName = foodName;
+		this.isAte = isAte;
 	}
 
 	public long getSeq() {
@@ -77,13 +89,21 @@ public class AteHistory implements Serializable{
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-
-	public String getDate() {
-		return date;
+	
+	public Date getEatDate() {
+		return eatDate;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setEatDate(Date eatDate) {
+		this.eatDate = eatDate;
+	}
+
+	public Date getReceiptDate() {
+		return receiptDate;
+	}
+
+	public void setReceiptDate(Date receiptDate) {
+		this.receiptDate = receiptDate;
 	}
 
 	public String getReceiptNumber() {
@@ -109,10 +129,20 @@ public class AteHistory implements Serializable{
 	public void setFoodName(String foodName) {
 		this.foodName = foodName;
 	}
+	
+	public boolean isAte() {
+		return isAte;
+	}
+
+	public void setAte(boolean isAte) {
+		this.isAte = isAte;
+	}
 
 	@Override
 	public String toString() {
-		return "AteHistory [seq=" + seq + ", date=" + date + ", receiptNumber=" + receiptNumber + ", restaurantName="
-				+ restaurantName + ", foodName=" + foodName + "]";
+		return "AteHistory [seq=" + seq + ", userId=" + userId + ", eatDate=" + eatDate + ", receiptDate=" + receiptDate
+				+ ", receiptNumber=" + receiptNumber + ", restaurantName=" + restaurantName + ", foodName=" + foodName
+				+ ", isAte=" + isAte + "]";
 	}
+	
 }

@@ -78,7 +78,7 @@ public class RestaurantService {
 		List<Restaurant> restaurantList = (List<Restaurant>) restaurantRepository.findByLocationSidoAndLocationSigugunAndLocationDongAndCategoryOrderByNameAsc(sido, sigugun, dong, cate);
 		return restaurantList;
 	}
-<<<<<<< HEAD
+
 	
 	public boolean normalizeLocation(Restaurant rsnt) {
 		if(rsnt.getLocation().getNormalize() == 0){
@@ -101,7 +101,5 @@ public class RestaurantService {
 		return false;
 	}
 	
-=======
 
->>>>>>> develop/Temporary
 }

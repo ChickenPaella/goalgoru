@@ -1,13 +1,13 @@
 package com.gorugoru.api.service;
 
-<<<<<<< HEAD
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.domain.model.Restaurant;
 import com.gorugoru.api.dto.Location;
-=======
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +16,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.gorugoru.api.domain.repository.RestaurantLocationRepository;
->>>>>>> develop/Temporary
+
 
 @Service
 public class GeoService {
 	
-<<<<<<< HEAD
-=======
 	@Autowired
 	RestaurantLocationRepository restaurantLocationRepository;
 
@@ -51,5 +49,5 @@ public class GeoService {
 
 	    return 0.001 * dist;
 	}
->>>>>>> develop/Temporary
+
 }

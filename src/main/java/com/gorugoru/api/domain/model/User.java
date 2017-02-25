@@ -78,15 +78,12 @@ public class User implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String profileImage;
 	
-<<<<<<< HEAD
 	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)//for camp LAZY)
-=======
 	@Column
 	@JsonView(Views.DEF.class)
 	private String cardNumber;
 	
 	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
->>>>>>> develop/Temporary
 	@JoinColumn(name = "user_point_seq")
 	@NotNull
 	@JsonView(Views.DEF.class)

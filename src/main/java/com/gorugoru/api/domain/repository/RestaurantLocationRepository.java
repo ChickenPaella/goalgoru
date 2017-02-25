@@ -13,7 +13,7 @@ import com.gorugoru.api.domain.model.RestaurantLocation;
 @Transactional
 public interface RestaurantLocationRepository extends JpaRepository<RestaurantLocation, Long> {
 	
-	@Query("select dong from RestaurantLocation t where t.sigugun = :sigugun")
-	public abstract List<String> findBySigugun(@Param("sigugun") String sigugun);
-	
+	@Query("select t from RestaurantLocation t where t.sigugun = :sigugun")
+	public abstract List<RestaurantLocation> findBySigugun(@Param("sigugun") String sigugun);
+
 }

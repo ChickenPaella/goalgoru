@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService{
 	 * @throws Exception 
 	 */
 	public User regsistUserForSNS(AuthProvider authProvider, String authUID, String name, String birthDate,
-			String email, String phone, String profileImage) {
+			String email, String phone, String profileImage, String cardNumber) {
 		
 		User user = userRepository.findOneByAuthProviderAndAuthUID(authProvider.toString(), authUID);
 		
@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService{
 			logger.info("insert New User");
 			//insert
 			String tmpId = "-temp-"+authProvider.toString()+"-"+authUID;
-			return registUser(authProvider, authUID, tmpId, null, name, birthDate, email, phone, profileImage);
+			return registUser(authProvider, authUID, tmpId, null, name, birthDate, email, phone, profileImage, cardNumber);
 		}else{
 			logger.info("modify exists User: "+user.toString());
 			//update
@@ -81,8 +81,8 @@ public class UserService implements UserDetailsService{
 	 * @return
 	 */
 	public User registUserForOwn(String id, String pass, String name, String birthDate, String email,
-			String phone, String profileImage){
-		return registUser(AuthProvider.NONE, null, id, pass, name, birthDate, email, phone, profileImage);
+			String phone, String profileImage, String cardNumber){
+		return registUser(AuthProvider.NONE, null, id, pass, name, birthDate, email, phone, profileImage, cardNumber);
 	}
 	
 	/**
@@ -99,14 +99,18 @@ public class UserService implements UserDetailsService{
 	 * @return
 	 */
 	public User registUser(AuthProvider authProvider, String authUID, String id, String pass, String name, String birthDate, String email,
-			String phone, String profileImage){
+			String phone, String profileImage, String cardNumber){
 		
 		Date date = DateUtil.parseDate(birthDate);
 		
-		User user = new User(authProvider.toString(), authUID, id, pass, name, date, email, phone, profileImage);
+		User user = new User(authProvider.toString(), authUID, id, pass, name, date, email, phone, profileImage, cardNumber);
 		user.setCreated(new Date());
 		user = userRepository.save(user);
 		return user;
+	}
+	
+	public void registCardNumber(User user) {
+		userRepository.save(user);
 	}
 	
 	public List<User> getUserList(){

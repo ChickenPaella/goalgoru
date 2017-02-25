@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -82,13 +83,14 @@ public class UserController {
 		return new ResponseEntity<String>("OK "+user.getSeq(), HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "/cardnumber", method = RequestMethod.POST)
-	public ResponseEntity<?> registCardNumber(HttpServletRequest request, @RequestParam("user") User user) {
+	@ResponseBody
+	@RequestMapping(path = "/cardnumber", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<?> registCardNumber(HttpServletRequest request, @RequestBody User user) {
 		logger.info("registCardNumber()");
 		logger.info("user id: " + user.getId());
 		logger.info("user name: " + user.getName());
 		
-		userService.registCardNumber(user);
+		user=userService.registCardNumber(user);
 		
 		return new ResponseEntity<String>("OK"+user.getCardNumber(),HttpStatus.OK);
 	}

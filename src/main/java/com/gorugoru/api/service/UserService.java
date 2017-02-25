@@ -17,7 +17,10 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.auth.AuthProvider;
+import com.gorugoru.api.domain.model.Food;
+import com.gorugoru.api.domain.model.Nutri;
 import com.gorugoru.api.domain.model.User;
+import com.gorugoru.api.domain.repository.FoodRepository;
 import com.gorugoru.api.domain.repository.UserRepository;
 import com.gorugoru.api.dto.SecUser;
 import com.gorugoru.util.DateUtil;
@@ -32,6 +35,9 @@ public class UserService implements UserDetailsService{
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	FoodRepository foodRepository;
 	
 	/**
 	 * 사용자등록 소셜로그인용
@@ -109,13 +115,64 @@ public class UserService implements UserDetailsService{
 		return user;
 	}
 	
-	public void registCardNumber(User user) {
-		userRepository.save(user);
+	public User registCardNumber(User user) {
+		user=userRepository.save(user);
+		return user;
 	}
 	
 	public List<User> getUserList(){
 		List<User> userList = (List<User>) userRepository.findAll();
 		return userList;
+	}
+	
+	public User managePoint(String userId, String foodName) {
+		
+		logger.info("managePoint()");
+		
+		User user = userRepository.findOneById(userId);
+		Food food = foodRepository.findOneByName(foodName);
+		
+		if(food.getMainNutri()==Nutri.Carbohydrate ) {
+			if(user.getPoint().getBadgeCarbo()<3) {
+				user.getPoint().setBadgeCarbo(user.getPoint().getBadgeCarbo()+1);
+			}
+			else {
+				logger.info("You can't collect more Carbo badge! (3/3)");
+				logger.info("carbo: " + user.getPoint().getBadgeCarbo() + " protein: " + user.getPoint().getBadgeProtein() + " fat: " + user.getPoint().getBadgeFat() + " star: " + user.getPoint().getStar());
+				return user;
+			}
+		}
+		else if(food.getMainNutri()==Nutri.Protein) {
+			if(user.getPoint().getBadgeProtein()<3) {
+				user.getPoint().setBadgeProtein(user.getPoint().getBadgeProtein()+1);
+			}
+			else {
+				logger.info("You can't collect more Protein badge! (3/3)");
+				logger.info("carbo: " + user.getPoint().getBadgeCarbo() + " protein: " + user.getPoint().getBadgeProtein() + " fat: " + user.getPoint().getBadgeFat() + " star: " + user.getPoint().getStar());
+				return user;
+			}	
+		} 
+		else if(food.getMainNutri()==Nutri.Fat) {
+			if(user.getPoint().getBadgeFat()<3) {
+				user.getPoint().setBadgeFat(user.getPoint().getBadgeFat()+1);
+			}
+			else {
+				logger.info("You can't collect more Fat badge! (3/3)");
+				logger.info("carbo: " + user.getPoint().getBadgeCarbo() + " protein: " + user.getPoint().getBadgeProtein() + " fat: " + user.getPoint().getBadgeFat() + " star: " + user.getPoint().getStar());
+				return user;
+			}	
+		}
+		
+		if(user.getPoint().getBadgeCarbo()==3 && user.getPoint().getBadgeProtein()==3 && user.getPoint().getBadgeFat()==3) {
+			user.getPoint().setBadgeCarbo(0);
+			user.getPoint().setBadgeProtein(0);
+			user.getPoint().setBadgeFat(0);
+			user.getPoint().setStar(user.getPoint().getStar()+1);
+			logger.info("별 1개 증가!");
+		}
+		user=userRepository.save(user);
+		logger.info("carbo: " + user.getPoint().getBadgeCarbo() + " protein: " + user.getPoint().getBadgeProtein() + " fat: " + user.getPoint().getBadgeFat() + " star: " + user.getPoint().getStar());
+		return user;
 	}
 	
 	/**

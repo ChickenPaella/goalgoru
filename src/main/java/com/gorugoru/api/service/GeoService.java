@@ -37,7 +37,7 @@ public class GeoService {
 		return null;
 	}
 	
-	public double getDistanceBetweenRestaurant(double nowLat, double nowLng, double setLat, double setLng) {
+	public String getDistanceBetweenRestaurant(double nowLat, double nowLng, double setLat, double setLng) {
 		double earthRadius = 6371000; //meters
 	    double dLat = Math.toRadians(setLat - nowLat);
 	    double dLng = Math.toRadians(setLng - nowLng);
@@ -47,7 +47,7 @@ public class GeoService {
 	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 	    float dist = (float) (earthRadius * c);
 
-	    return 0.001 * dist;
+	    return Double.toString(Math.round(dist));
 	}
 
 }

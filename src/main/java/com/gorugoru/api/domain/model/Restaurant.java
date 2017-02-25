@@ -60,6 +60,15 @@ public class Restaurant implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String phone;
 	
+	@Column
+	@JsonView(Views.DEF.class)
+	private String profileImage;
+	
+	@Column
+	@NotNull
+	@JsonView(Views.DEF.class)
+	private String distance;
+	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "restaurant", optional = true, fetch = FetchType.EAGER)//for camp LAZY)
 	@NotNull
 	@JsonView(Views.DEF.class)
@@ -81,16 +90,18 @@ public class Restaurant implements Serializable{
 	
 	public Restaurant() {}
 	
-	public Restaurant(String dong, String name, String category, String address, String phone) {
+	public Restaurant(String dong, String name, String category, String address, String phone, String profileImage, String distance) {
 		super();
 		this.dong = dong;
 		this.name = name;
 		this.category = category;
 		this.address = address;
 		this.phone = phone;
+		this.profileImage = profileImage;
+		this.distance = distance;
 	}
 	
-	public Restaurant(String dong, String name, String category, String address, String phone,
+	public Restaurant(String dong, String name, String category, String address, String phone, String profileImage, String distance,
 			RestaurantLocation location) {
 		super();
 		this.dong = dong;
@@ -98,6 +109,8 @@ public class Restaurant implements Serializable{
 		this.category = category;
 		this.address = address;
 		this.phone = phone;
+		this.profileImage = profileImage;
+		this.distance = distance;
 		this.location = location;
 	}
 
@@ -149,8 +162,24 @@ public class Restaurant implements Serializable{
 		this.phone = phone;
 	}
 	
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+
 	public RestaurantLocation getLocation() {
 		return location;
+	}
+	
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
 	}
 
 	public void setLocation(RestaurantLocation location) {
@@ -184,6 +213,8 @@ public class Restaurant implements Serializable{
 	@Override
 	public String toString() {
 		return "Restaurant [seq=" + seq + ", dong=" + dong + ", name=" + name + ", category=" + category + ", address="
-				+ address + ", phone=" + phone + ", modified=" + modified + ", created=" + created + "]";
+				+ address + ", phone=" + phone + ", profileImage=" + profileImage + ", distance=" + distance
+				+ ", location=" + location + ", foods=" + foods + ", modified=" + modified + ", created=" + created
+				+ "]";
 	}
 }

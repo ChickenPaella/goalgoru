@@ -33,6 +33,7 @@ import com.gorugoru.api.domain.model.RestaurantCategory;
 import com.gorugoru.api.domain.model.RestaurantFood;
 import com.gorugoru.api.dto.FoodConstants;
 import com.gorugoru.api.jackson.Views;
+import com.gorugoru.api.service.GeoService;
 import com.gorugoru.api.service.RestaurantService;
 import com.gorugoru.util.FileUtil;
 
@@ -58,6 +59,9 @@ public class RestaurantController {
 	
 	@Autowired
 	DaumLocalComponent daumlocal;
+	
+	@Autowired
+	GeoService geoService;
 	
 	/**
 	 * 식당 카테고리 리스트
@@ -189,6 +193,15 @@ public class RestaurantController {
 			@PathVariable("latitude") String latitude, @PathVariable("longitude") String longitude) throws IOException {
 		
 		List<Restaurant> rsntList = rsntService.getRestaurantListByCoord(Double.valueOf(latitude).doubleValue(), Double.valueOf(longitude).doubleValue());
+		
+		rsntList.forEach((input) -> {
+			input.getLocation().getLatitude();
+			input.getLocation().getLongitude();
+			input.setDistance(geoService.getDistanceBetweenRestaurant(Double.valueOf(latitude).doubleValue(), 
+					Double.valueOf(longitude).doubleValue(),
+					input.getLocation().getLatitude(), 
+					input.getLocation().getLongitude()));
+		});
 		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(rsntList);
 		

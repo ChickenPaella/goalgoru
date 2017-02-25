@@ -65,7 +65,6 @@ public class Restaurant implements Serializable{
 	private String profileImage;
 	
 	@Column
-	@NotNull
 	@JsonView(Views.DEF.class)
 	private String distance;
 	

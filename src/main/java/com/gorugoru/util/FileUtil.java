@@ -43,22 +43,22 @@ public class FileUtil {
 				String cate = cols[2];
 				String address = cols[3];
 				String phone = cols[4];
-				String profileImage = cols[5];
-				String distance = cols[6];
-				String sido = cols[7];
-				String gugun = cols[8];
-				String dongeup = cols[9];
-				String street = cols[10];
-				String bunji = cols[11];
-				String etc = cols[12];
-				String lat = cols[13];//(cols.length > 10) ? cols[10] : "";
-				String lnt = cols[14];//(cols.length > 11) ? cols[11] : "";
+				//String profileImage = cols[5];
+				//String distance = cols[6];
+				String sido = cols[5];
+				String gugun = cols[6];
+				String dongeup = cols[7];
+				String street = cols[8];
+				String bunji = cols[9];
+				String etc = cols[10];
+				String lat = cols[11];//(cols.length > 10) ? cols[10] : "";
+				String lnt = cols[12];//(cols.length > 11) ? cols[11] : "";
 				
 				double lat2 = ("".equals(lat)) ? 0d : Double.parseDouble(lat);
 				double lnt2 = ("".equals(lnt)) ? 0d : Double.parseDouble(lnt);
 				
 				RestaurantLocation location = new RestaurantLocation(sido, gugun, dongeup, street, bunji, etc, lat2, lnt2);
-				Restaurant rsnt = new Restaurant(dong, name, cate, address, phone, profileImage, distance, location);
+				Restaurant rsnt = new Restaurant(dong, name, cate, address, phone, null, null, location);
 				location.setRestaurant(rsnt);
 				list.add(rsnt);
 

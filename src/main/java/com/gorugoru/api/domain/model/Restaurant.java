@@ -74,7 +74,6 @@ public class Restaurant implements Serializable{
 	private RestaurantLocation location;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)//for camp LAZY) //EAGER not working
-	@NotNull
 	@JsonView(Views.MORE.class)
 	private List<RestaurantFood> foods;
 	

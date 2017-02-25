@@ -109,7 +109,7 @@ public class GeoController {
 		
 		logger.info("getDistance nowLat: " + nowLat + "nowLng: " + nowLng + "setLat: " + setLat + "setLng: " + setLng);
 
-		double distance = geoService.getDistanceBetweenRestaurant(Double.valueOf(nowLat).doubleValue(),Double.valueOf(nowLng).doubleValue(),Double.valueOf(setLat).doubleValue(),Double.valueOf(setLng).doubleValue());
+		String distance = geoService.getDistanceBetweenRestaurant(Double.valueOf(nowLat).doubleValue(),Double.valueOf(nowLng).doubleValue(),Double.valueOf(setLat).doubleValue(),Double.valueOf(setLng).doubleValue());
 		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(distance);
 		return new ResponseEntity<String>(json, HttpStatus.OK);

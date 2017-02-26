@@ -45,12 +45,12 @@ public class AteHistoryController {
 			@RequestBody AteHistory ateHistory) throws JsonProcessingException {
 		
 		logger.info("resgistAteHistory()");
-		logger.info("User ID: " + ateHistory.getUserId());
+		logger.info("User ID: " + ateHistory.getId());
 		logger.info("Restaurant name: " + ateHistory.getRestaurantName());
 		
 		ateHistory = ateHistoryService.insertAteHistory(ateHistory);
 		
-		userService.managePoint(ateHistory.getUserId(), ateHistory.getFoodName());
+		userService.managePoint(ateHistory.getId(), ateHistory.getFoodName());
 		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(ateHistory);
 		

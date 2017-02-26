@@ -28,7 +28,7 @@ public class AteHistory implements Serializable{
 	@Column
 	@NotNull
 	@JsonView(Views.DEF.class)
-	private String userId;
+	private String id;
 	
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NOW()")
 	@NotNull
@@ -63,15 +63,14 @@ public class AteHistory implements Serializable{
 		
 	}
 
-	public AteHistory(String userId, Date eatDate, Date receiptDate, String receiptNumber, String restaurantName, String foodName, boolean isAte) {
+	public AteHistory(String id, Date eatDate, Date receiptDate, String receiptNumber, String restaurantName, String foodName) {
 		super();
-		this.userId = userId;
+		this.id = id;
 		this.eatDate = eatDate;
 		this.receiptDate = receiptDate;
 		this.receiptNumber = receiptNumber;
 		this.restaurantName = restaurantName;
 		this.foodName = foodName;
-		this.isAte = isAte;
 	}
 
 	public long getSeq() {
@@ -82,14 +81,14 @@ public class AteHistory implements Serializable{
 		this.seq = seq;
 	}
 	
-	public String getUserId() {
-		return userId;
+	public String getId() {
+		return id;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setId(String id) {
+		this.id = id;
 	}
-	
+
 	public Date getEatDate() {
 		return eatDate;
 	}
@@ -140,7 +139,7 @@ public class AteHistory implements Serializable{
 
 	@Override
 	public String toString() {
-		return "AteHistory [seq=" + seq + ", userId=" + userId + ", eatDate=" + eatDate + ", receiptDate=" + receiptDate
+		return "AteHistory [seq=" + seq + ", id=" + id + ", eatDate=" + eatDate + ", receiptDate=" + receiptDate
 				+ ", receiptNumber=" + receiptNumber + ", restaurantName=" + restaurantName + ", foodName=" + foodName
 				+ ", isAte=" + isAte + "]";
 	}

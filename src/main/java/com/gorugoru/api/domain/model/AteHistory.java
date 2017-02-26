@@ -35,8 +35,7 @@ public class AteHistory implements Serializable{
 	@JsonView(Views.DEF.class)
 	private Date eatDate;
 	
-	@Column(nullable = false, updatable = true, columnDefinition = "DATETIME DEFAULT NOW()")
-	@NotNull
+	@Column(nullable = true, insertable = false, updatable = true, columnDefinition = "DATETIME")
 	@JsonView(Views.DEF.class)
 	private Date receiptDate;
 	

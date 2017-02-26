@@ -1,12 +1,6 @@
 package com.gorugoru.api.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,23 +11,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gorugoru.api.component.auth.AuthProvider;
 import com.gorugoru.api.constant.JsonResults;
+import com.gorugoru.api.domain.model.AteHistory;
 import com.gorugoru.api.domain.model.User;
 import com.gorugoru.api.domain.repository.UserRepository;
 import com.gorugoru.api.dto.Card;
 import com.gorugoru.api.jackson.Views;
+import com.gorugoru.api.service.AteHistoryService;
 import com.gorugoru.api.service.UserService;
 
 /**
@@ -50,9 +43,9 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-
+	
 	@Autowired
-	UserRepository userRepository;
+	AteHistoryService ateHistoryService;
 
 	@Autowired
 	ObjectMapper mapper;
@@ -105,18 +98,28 @@ public class UserController {
 			return new ResponseEntity<String>(JsonResults.RESULT_OK_SUCCESS, HttpStatus.OK);
 		}
 	}
-
-	@RequestMapping(path = "/detail/{id}/{date}", method = RequestMethod.GET)
-	public ResponseEntity<?> userDetail(HttpServletRequest request, @PathVariable("id") String id,
-			@PathVariable("date") String date) throws JsonProcessingException {
-		logger.info("userDetail() id: " + id);
+	
+	/**
+	 * 나의 상태
+	 * @param request
+	 * @param id
+	 * @param date
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(path = "/status/{id}/{year}/{month}", method = RequestMethod.GET)
+	public ResponseEntity<?> userStatus(HttpServletRequest request, @PathVariable("id") String id,
+			@PathVariable("year") String year, @PathVariable("month") String month) throws JsonProcessingException {
+		logger.info("userStatus() id: " + id);
 
 		User user = userService.getUserById(id);
 		if (user == null) {
-			return new ResponseEntity<String>("{result:\"NOT EXIST\"}", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(JsonResults.RESULT_FAIL_NOT_EXISTS, HttpStatus.BAD_REQUEST);
 		}
-
-		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(user);
+		
+		List<AteHistory> ateList = ateHistoryService.getAteHistoryList(year, month);
+		
+		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(ateList);
 
 		return new ResponseEntity<String>(json, HttpStatus.OK);
 	}

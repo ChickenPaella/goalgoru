@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.gorugoru.api.domain.model.AteHistory;
 import com.gorugoru.api.domain.repository.AteHistoryRepository;
+import com.gorugoru.api.dto.Receipt;
 
 @Service
 public class AteHistoryService {
@@ -24,6 +25,17 @@ public class AteHistoryService {
 	public AteHistory insertAteHistory(AteHistory ateHistory) {
 		logger.info("insertAteHistory() !!!");
 		ateHistory = historyRepository.save(ateHistory);
+		return ateHistory;
+	}
+	
+	public AteHistory insertReceipt(AteHistory ateHistory, Receipt receipt) {
+		if(ateHistory.getFoodName()!=receipt.getFoodName() || ateHistory.getRestaurantName()!=receipt.getRestaurantName())
+		{
+			logger.info("Invalid receipt!!");
+			return ateHistory;
+		}
+		ateHistory.setReceiptDate(receipt.getReceiptDate());
+		ateHistory.setReceiptNumber(receipt.getReceiptNumber());
 		return ateHistory;
 	}
 	

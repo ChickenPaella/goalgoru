@@ -14,7 +14,9 @@ import com.gorugoru.api.domain.model.AteHistory;
 
 @Transactional
 public interface AteHistoryRepository extends JpaRepository<AteHistory, Long> {
-
+	
+	public abstract AteHistory findOneByIdAndEatDate(@Param("id") String id, @Param("eatDate") Date eateDate);
+	
 	public abstract List<AteHistory> findById(@Param("id") String id);
 
 	public abstract List<AteHistory> findAllByEatDateBetween(Date s, Date e);

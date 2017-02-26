@@ -1,5 +1,7 @@
 package com.gorugoru.api.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +23,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.domain.model.AteHistory;
 import com.gorugoru.api.domain.model.User;
+import com.gorugoru.api.domain.repository.AteHistoryRepository;
+import com.gorugoru.api.dto.Receipt;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.AteHistoryService;
 import com.gorugoru.api.service.UserService;
@@ -39,9 +44,12 @@ public class AteHistoryController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	AteHistoryRepository ateHistoryRepository;
+	
 	@ResponseBody
-	@RequestMapping(path = "/save", method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<?> save(HttpServletRequest request, HttpServletResponse response, 
+	@RequestMapping(path = "/save/eat", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<?> saveEat(HttpServletRequest request, HttpServletResponse response, 
 			@RequestBody AteHistory ateHistory) throws JsonProcessingException {
 		
 		logger.info("resgistAteHistory()");
@@ -50,11 +58,30 @@ public class AteHistoryController {
 		
 		ateHistory = ateHistoryService.insertAteHistory(ateHistory);
 		
-		userService.managePoint(ateHistory.getId(), ateHistory.getFoodName());
-		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(ateHistory);
 		
 		return new ResponseEntity<String>(json, HttpStatus.OK);
 	}
 	
+	@ResponseBody
+	@RequestMapping(path = "/save/ate/{id}", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<?> saveAte(HttpServletRequest request, HttpServletResponse response, 
+			@RequestBody Receipt receipt, @PathVariable("id") String id) throws JsonProcessingException {
+		
+		logger.info("resgistAteHistory()");
+		logger.info("Food name: " + receipt.getFoodName());
+		logger.info("Restaurant name: " + receipt.getRestaurantName());
+		
+		Date eatDate = new Date();
+		
+		AteHistory ateHistory = ateHistoryRepository.findOneByIdAndEatDate(id, eatDate);
+		
+		ateHistory = ateHistoryService.insertReceipt(ateHistory, receipt);
+		
+		userService.managePoint(id, ateHistory.getFoodName());
+		
+		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(ateHistory);
+		
+		return new ResponseEntity<String>(json, HttpStatus.OK);
+	}
 }

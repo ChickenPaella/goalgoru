@@ -30,10 +30,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.auth.AuthProvider;
 import com.gorugoru.api.constant.JsonResults;
+import com.gorugoru.api.domain.model.AteHistory;
 import com.gorugoru.api.domain.model.User;
 import com.gorugoru.api.domain.repository.UserRepository;
 import com.gorugoru.api.dto.Card;
 import com.gorugoru.api.jackson.Views;
+import com.gorugoru.api.service.AteHistoryService;
 import com.gorugoru.api.service.UserService;
 
 /**
@@ -56,6 +58,9 @@ public class UserController {
 
 	@Autowired
 	ObjectMapper mapper;
+	
+	@Autowired
+	AteHistoryService ateHistoryService;
 
 	@RequestMapping(path = "/view/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> view(HttpServletRequest request, ModelMap model, @PathVariable("id") String id)

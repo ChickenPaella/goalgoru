@@ -24,6 +24,11 @@ public class AteHistoryService {
 		return ateHistory;
 	}
 	
+	public List<AteHistory> getAteHistoryListById(String id) {
+		List<AteHistory> list = historyRepository.findById(id);
+		return list;
+	}
+	
 	public List<AteHistory> getAteHistoryList() {
 		List<AteHistory> list = historyRepository.findAll();
 		return list;

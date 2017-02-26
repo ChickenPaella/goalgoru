@@ -43,9 +43,6 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-	
-	@Autowired
-	AteHistoryService ateHistoryService;
 
 	@Autowired
 	ObjectMapper mapper;

@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gorugoru.api.component.NutriMiner;
 import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.constant.FoodConstants;
 import com.gorugoru.api.constant.JsonResults;
@@ -180,6 +179,8 @@ public class RestaurantController {
 		//더미
 		if(foodList.isEmpty()){
 			String menuList[] = FoodConstants.getMenuList(restaurant.getCategory());
+			//없으면 전부 분식처리
+			if(menuList == null) menuList = FoodConstants.MENU_LIST_BUN_BOB;
 			if(menuList != null){
 				Random rand = new Random(System.currentTimeMillis());
 				

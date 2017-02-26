@@ -54,6 +54,11 @@ public class AteHistory implements Serializable{
 	@JsonView(Views.DEF.class)
 	private String foodName;
 	
+	@Column
+	@NotNull
+	@JsonView(Views.DEF.class)
+	private Nutri mainNutri;
+	
 	@Column(nullable = false)
 	@JsonView(Views.DEF.class)
 	private boolean isAte;
@@ -62,7 +67,7 @@ public class AteHistory implements Serializable{
 		
 	}
 
-	public AteHistory(String id, Date eatDate, Date receiptDate, String receiptNumber, String restaurantName, String foodName) {
+	public AteHistory(String id, Date eatDate, Date receiptDate, String receiptNumber, String restaurantName, String foodName, Nutri mainNutri) {
 		super();
 		this.id = id;
 		this.eatDate = eatDate;
@@ -70,6 +75,7 @@ public class AteHistory implements Serializable{
 		this.receiptNumber = receiptNumber;
 		this.restaurantName = restaurantName;
 		this.foodName = foodName;
+		this.mainNutri = mainNutri;
 	}
 
 	public long getSeq() {
@@ -128,6 +134,14 @@ public class AteHistory implements Serializable{
 		this.foodName = foodName;
 	}
 	
+	public Nutri getMainNutri() {
+		return mainNutri;
+	}
+
+	public void setMainNutri(Nutri mainNutri) {
+		this.mainNutri = mainNutri;
+	}
+
 	public boolean isAte() {
 		return isAte;
 	}
@@ -140,7 +154,7 @@ public class AteHistory implements Serializable{
 	public String toString() {
 		return "AteHistory [seq=" + seq + ", id=" + id + ", eatDate=" + eatDate + ", receiptDate=" + receiptDate
 				+ ", receiptNumber=" + receiptNumber + ", restaurantName=" + restaurantName + ", foodName=" + foodName
-				+ ", isAte=" + isAte + "]";
+				+ ", mainNutri=" + mainNutri + ", isAte=" + isAte + "]";
 	}
 	
 }

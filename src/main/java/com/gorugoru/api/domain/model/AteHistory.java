@@ -39,8 +39,7 @@ public class AteHistory implements Serializable{
 	@JsonView(Views.DEF.class)
 	private Date receiptDate;
 	
-	@Column
-	@NotNull
+	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
 	private String receiptNumber;
 	

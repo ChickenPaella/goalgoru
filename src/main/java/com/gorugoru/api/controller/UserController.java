@@ -22,9 +22,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.constant.JsonResults;
 import com.gorugoru.api.domain.model.AteHistory;
+import com.gorugoru.api.domain.model.Nutri;
 import com.gorugoru.api.domain.model.User;
-import com.gorugoru.api.domain.repository.UserRepository;
 import com.gorugoru.api.dto.Card;
+import com.gorugoru.api.dto.NutriCount;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.AteHistoryService;
 import com.gorugoru.api.service.UserService;
@@ -119,9 +120,18 @@ public class UserController {
 		
 		List<AteHistory> ateList = ateHistoryService.getAteHistoryList(year, month);
 		
+		NutriCount nutriCount = new NutriCount();
+		for(int i=0;i<ateList.size();i++){
+			if(ateList.get(i).getMainNutri() == Nutri.Carbohydrate) nutriCount.setCarbo(nutriCount.getCarbo()+1);
+			else if(ateList.get(i).getMainNutri() == Nutri.Protein) nutriCount.setProtein(nutriCount.getProtein()+1);
+			else if(ateList.get(i).getMainNutri() == Nutri.Fat) nutriCount.setFat(nutriCount.getFat()+1);
+		}
+		
+		String graph = mapper.writerWithView(Views.DEF.class).writeValueAsString(nutriCount);
+		
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(ateList);
 
-		return new ResponseEntity<String>(json, HttpStatus.OK);
+		return new ResponseEntity<String>("{\"nutri_count\":"+graph+",\"ate_list\":"+json+"}", HttpStatus.OK);
 	}
 
 	// @RequestMapping(path = "/list", method = RequestMethod.GET)

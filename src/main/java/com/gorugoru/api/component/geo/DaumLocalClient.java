@@ -10,12 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import okhttp3.OkHttpClient;
+
 public class DaumLocalClient extends DaumClient {
 	
 	private static final String OUTPUT = "json";//xml jsonp
 
-	public DaumLocalClient(String apikey) {
-		super(apikey);
+	public DaumLocalClient(OkHttpClient okHttpClient, String apikey) {
+		super(okHttpClient, apikey);
 	}
 	
 	/**

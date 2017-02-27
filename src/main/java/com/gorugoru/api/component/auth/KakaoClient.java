@@ -6,15 +6,19 @@ import java.util.Arrays;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.gorugoru.api.component.OAuth2Client;
+
+import okhttp3.OkHttpClient;
 
 /**
  * 카카오 REST API 클라이언트
@@ -30,14 +34,10 @@ public class KakaoClient implements OAuth2Client {
 	private final String redirectUri;
 	private final RestTemplate restTemplate;
 	
-	public KakaoClient(String clientId, String redirectUri){
+	public KakaoClient(OkHttpClient okHttpClient, String clientId, String redirectUri){
 		this.clientId = clientId;
 		this.redirectUri = redirectUri;
-		
-		OkHttp3ClientHttpRequestFactory factory = new OkHttp3ClientHttpRequestFactory();
-        factory.setReadTimeout(10 * 1000);
-        factory.setConnectTimeout(10 * 1000);
-        restTemplate = new RestTemplate(factory);
+		this.restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(okHttpClient));
 	}
 	
 	/**
@@ -83,9 +83,17 @@ public class KakaoClient implements OAuth2Client {
 		}
 	    
 	    HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(body, headers);
-	    ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
 	    
-	    return response.getBody();
+		try {
+			ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+			if (response.getStatusCode() == HttpStatus.OK) {
+				return response.getBody();
+			}
+		} catch (RestClientException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 	
 	/**
@@ -143,10 +151,17 @@ public class KakaoClient implements OAuth2Client {
 			// empty body
 			entity = new HttpEntity<String>("", headers);
 		}
-	     
-	    ResponseEntity<String> response = restTemplate.exchange(uri, method, entity, String.class);
-		
-	    return response.getBody();
+
+		try {
+			ResponseEntity<String> response = restTemplate.exchange(uri, method, entity, String.class);
+			if (response.getStatusCode() == HttpStatus.OK) {
+				return response.getBody();
+			}
+		} catch (RestClientException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 	
 	/**

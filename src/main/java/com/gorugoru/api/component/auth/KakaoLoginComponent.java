@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import okhttp3.OkHttpClient;
+
 @Component
 public class KakaoLoginComponent implements LoginComponent{
 	
@@ -27,6 +29,9 @@ public class KakaoLoginComponent implements LoginComponent{
 	private ObjectMapper mapper;
 	
 	private KakaoClient kakaoClient;
+	
+	@Autowired
+	private OkHttpClient okHttpClient;
 
 	@Value("${gorugoru.auth.kakao.client-id}")
 	private String client_id;
@@ -38,8 +43,9 @@ public class KakaoLoginComponent implements LoginComponent{
 	}
 	
 	@PostConstruct
-    public void init() {
-		kakaoClient = new KakaoClient(client_id, redirect_url);
+    private void init() {
+		kakaoClient = new KakaoClient(okHttpClient, client_id, redirect_url);
+		logger.info("KakaoLoginComponent init");
     }
 	
 	/**
@@ -55,6 +61,7 @@ public class KakaoLoginComponent implements LoginComponent{
 		}
 		
 		final String json = kakaoClient.authenticate(code);
+		if(json == null) return false;
 		
 		try {
 			Token token = mapper.readValue(json, Token.class);
@@ -91,6 +98,7 @@ public class KakaoLoginComponent implements LoginComponent{
 		
 		//TODO 토큰 만료시 처리 필요함
 		final String json = kakaoClient.refresh(kakaoToken.getRefreshToken());
+		if(json == null) return false;
 		
 		try {
 			Token token = mapper.readValue(json, Token.class);
@@ -139,6 +147,7 @@ public class KakaoLoginComponent implements LoginComponent{
 		}
 		
 		final String json = kakaoClient.signup(accessToken);
+		if(json == null) return false;
 		//logger.info(json);
 		
 		try {
@@ -173,6 +182,7 @@ public class KakaoLoginComponent implements LoginComponent{
 		}
 		
 		final String json = kakaoClient.revokeToken(accessToken);
+		if(json == null) return false;
 		//logger.info(json);
 		
 		try {
@@ -215,6 +225,7 @@ public class KakaoLoginComponent implements LoginComponent{
 		}
 		
 		final String json = kakaoClient.unlink(accessToken);
+		if(json == null) return false;
 		
 		try {
 			ApiResponse res = mapper.readValue(json, ApiResponse.class);
@@ -250,6 +261,7 @@ public class KakaoLoginComponent implements LoginComponent{
 		}
 		
 		final String json = kakaoClient.userProfile(accessToken);
+		if(json == null) return null;
 		logger.info(json);
 		
 		try {
@@ -269,6 +281,8 @@ public class KakaoLoginComponent implements LoginComponent{
 	
 	public boolean validate(String accessToken) {
 		final String json = kakaoClient.validate(accessToken);
+		if(json == null) return false;
+		
 		logger.info(json);
 		
 		try {

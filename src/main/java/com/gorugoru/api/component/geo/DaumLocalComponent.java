@@ -17,6 +17,8 @@ import com.gorugoru.api.component.geo.Coord.Channel.Item;
 import com.gorugoru.api.vo.Address;
 import com.gorugoru.api.vo.Location;
 
+import okhttp3.OkHttpClient;
+
 @Component
 public class DaumLocalComponent {
 	
@@ -27,6 +29,9 @@ public class DaumLocalComponent {
 	
 	private DaumLocalClient localClient;
 	
+	@Autowired
+	private OkHttpClient okHttpClient;
+	
 	@Value("${gorugoru.api.daum.api-key}")
 	private String api_key;
 	
@@ -35,7 +40,7 @@ public class DaumLocalComponent {
 	
 	@PostConstruct
     public void init() {
-		localClient = new DaumLocalClient(api_key);
+		localClient = new DaumLocalClient(okHttpClient, api_key);
     }
 	
 	public Location addr2coord(String address){

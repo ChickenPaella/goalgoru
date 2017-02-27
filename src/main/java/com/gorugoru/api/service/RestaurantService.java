@@ -1,6 +1,5 @@
 package com.gorugoru.api.service;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -36,7 +35,6 @@ public class RestaurantService {
 	
 	public void insertCategory(String name) {
 		RestaurantCategory category = new RestaurantCategory(name);
-		category.setCreated(new Date());
 		restaurantCategoryRepository.save(category);
 	}
 	
@@ -48,7 +46,6 @@ public class RestaurantService {
 	
 	public Restaurant insertRestaurant(Restaurant restaurant) {
 		if(restaurant.getLocation() == null) return null;
-		restaurant.setCreated(new Date());
 		restaurant = restaurantRepository.save(restaurant);
 		return restaurant;
 	}
@@ -56,7 +53,6 @@ public class RestaurantService {
 	public Restaurant insertRestaurant(String dong, String name, String category, String address, String phone, String profileImage, String distance,
 			String sido, String gugun, String dongeup, String street, String bunji, String etc) {
 		Restaurant restaurant = new Restaurant(dong, name, category, address, phone, profileImage, distance);
-		restaurant.setCreated(new Date());
 		RestaurantLocation loc = new RestaurantLocation(sido, gugun, dongeup, street, bunji, etc);
 		loc.setRestaurant(restaurant);
 		restaurant.setLocation(loc);

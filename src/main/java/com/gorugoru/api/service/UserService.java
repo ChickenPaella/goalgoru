@@ -113,7 +113,6 @@ public class UserService implements UserDetailsService{
 		Date date = DateUtil.parseDate(birthDate);
 		
 		User user = new User(authProvider.toString(), authUID, id, pass, name, date, email, phone, profileImage, cardNumber);
-		user.setCreated(new Date());
 		user = userRepository.save(user);
 		return user;
 	}

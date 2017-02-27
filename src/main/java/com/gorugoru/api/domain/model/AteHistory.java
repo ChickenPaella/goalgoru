@@ -1,7 +1,7 @@
 package com.gorugoru.api.domain.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,11 +33,11 @@ public class AteHistory implements Serializable{
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NOW()")
 	@NotNull
 	@JsonView(Views.DEF.class)
-	private Date eatDate;
+	private LocalDateTime eatDate;
 	
 	@Column(nullable = true, insertable = false, updatable = true, columnDefinition = "DATETIME")
 	@JsonView(Views.DEF.class)
-	private Date receiptDate;
+	private LocalDateTime receiptDate;
 	
 	@Column(nullable = true)
 	@JsonView(Views.DEF.class)
@@ -66,7 +66,7 @@ public class AteHistory implements Serializable{
 		
 	}
 
-	public AteHistory(String id, Date eatDate, Date receiptDate, String receiptNumber, String restaurantName, String foodName, Nutri mainNutri) {
+	public AteHistory(String id, LocalDateTime eatDate, LocalDateTime receiptDate, String receiptNumber, String restaurantName, String foodName, Nutri mainNutri) {
 		super();
 		this.id = id;
 		this.eatDate = eatDate;
@@ -93,19 +93,19 @@ public class AteHistory implements Serializable{
 		this.id = id;
 	}
 
-	public Date getEatDate() {
+	public LocalDateTime getEatDate() {
 		return eatDate;
 	}
 
-	public void setEatDate(Date eatDate) {
+	public void setEatDate(LocalDateTime eatDate) {
 		this.eatDate = eatDate;
 	}
 
-	public Date getReceiptDate() {
+	public LocalDateTime getReceiptDate() {
 		return receiptDate;
 	}
 
-	public void setReceiptDate(Date receiptDate) {
+	public void setReceiptDate(LocalDateTime receiptDate) {
 		this.receiptDate = receiptDate;
 	}
 

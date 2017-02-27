@@ -1,7 +1,7 @@
 package com.gorugoru.api.domain.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -33,13 +31,12 @@ public class RestaurantCategory implements Serializable{
 	private String name;
 	
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-	@Temporal(TemporalType.TIMESTAMP)
 	@JsonView(Views.MORE.class)
-	private Date modified;
+	private LocalDateTime modified;
 
-	@Column(nullable = false, insertable = true, updatable = false, columnDefinition = "DATETIME DEFAULT '1000-01-01 00:00:00'")
+	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
 	@JsonView(Views.MORE.class)
-	private Date created;
+	private LocalDateTime created;
 
 	public RestaurantCategory() {}
 	
@@ -64,20 +61,12 @@ public class RestaurantCategory implements Serializable{
 		this.name = name;
 	}
 	
-	public Date getModified() {
+	public LocalDateTime getModified() {
 		return modified;
 	}
 
-	public void setModified(Date modified) {
-		this.modified = modified;
-	}
-
-	public Date getCreated() {
+	public LocalDateTime getCreated() {
 		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
 	}
 
 	@Override

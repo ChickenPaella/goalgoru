@@ -1,19 +1,20 @@
 package com.gorugoru.api.vo;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Receipt {
 	
 	private String restaurantName;
 	private String foodName;
-	private Date receiptDate;
+	private LocalDateTime receiptDate;
 	private String receiptNumber;
 	
 	public Receipt() {
 		
 	}
 	
-	public Receipt(String restaurantName, String foodName, Date receiptDate, String receiptNumber) {
+	public Receipt(String restaurantName, String foodName, LocalDateTime receiptDate, String receiptNumber) {
 		super();
 		this.restaurantName = restaurantName;
 		this.foodName = foodName;
@@ -37,11 +38,11 @@ public class Receipt {
 		this.foodName = foodName;
 	}
 
-	public Date getReceiptDate() {
+	public LocalDateTime getReceiptDate() {
 		return receiptDate;
 	}
 
-	public void setReceiptDate(Date receiptDate) {
+	public void setReceiptDate(LocalDateTime receiptDate) {
 		this.receiptDate = receiptDate;
 	}
 

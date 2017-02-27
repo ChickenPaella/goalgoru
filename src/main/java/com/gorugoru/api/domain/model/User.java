@@ -1,6 +1,7 @@
 package com.gorugoru.api.domain.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -92,13 +93,12 @@ public class User implements Serializable{
 	private UserPoint point;
 	
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-	@Temporal(TemporalType.TIMESTAMP)
 	@JsonView(Views.DEF.class)
-	private Date modified;
+	private LocalDateTime modified;
 
-	@Column(nullable = false, insertable = true, updatable = false, columnDefinition = "DATETIME DEFAULT '1000-01-01 00:00:00'")
+	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
 	@JsonView(Views.DEF.class)
-	private Date created;
+	private LocalDateTime created;
 
 	public User() {
 	}
@@ -215,20 +215,12 @@ public class User implements Serializable{
 		this.point = point;
 	}
 
-	public Date getModified() {
+	public LocalDateTime getModified() {
 		return modified;
 	}
 
-	public void setModified(Date modified) {
-		this.modified = modified;
-	}
-
-	public Date getCreated() {
+	public LocalDateTime getCreated() {
 		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
 	}
 
 	@Override

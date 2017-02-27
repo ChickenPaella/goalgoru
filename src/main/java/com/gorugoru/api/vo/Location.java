@@ -1,4 +1,4 @@
-package com.gorugoru.api.dto;
+package com.gorugoru.api.vo;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.gorugoru.api.jackson.Views;

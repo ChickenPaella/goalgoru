@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.domain.model.Restaurant;
-import com.gorugoru.api.dto.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.gorugoru.api.domain.repository.RestaurantLocationRepository;
+import com.gorugoru.api.vo.Location;
 
 
 @Service

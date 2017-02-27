@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.geo.Coord.Channel.Item;
-import com.gorugoru.api.dto.Address;
-import com.gorugoru.api.dto.Location;
+import com.gorugoru.api.vo.Address;
+import com.gorugoru.api.vo.Location;
 
 @Component
 public class DaumLocalComponent {

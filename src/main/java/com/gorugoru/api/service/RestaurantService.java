@@ -17,7 +17,7 @@ import com.gorugoru.api.domain.model.RestaurantLocation;
 import com.gorugoru.api.domain.repository.RestaurantCategoryRepository;
 import com.gorugoru.api.domain.repository.RestaurantLocationRepository;
 import com.gorugoru.api.domain.repository.RestaurantRepository;
-import com.gorugoru.api.dto.Location;
+import com.gorugoru.api.vo.Location;
 
 @Service
 public class RestaurantService {

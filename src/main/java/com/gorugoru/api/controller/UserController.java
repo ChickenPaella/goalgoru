@@ -24,11 +24,11 @@ import com.gorugoru.api.constant.JsonResults;
 import com.gorugoru.api.domain.model.AteHistory;
 import com.gorugoru.api.domain.model.Nutri;
 import com.gorugoru.api.domain.model.User;
-import com.gorugoru.api.dto.Card;
-import com.gorugoru.api.dto.NutriCount;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.AteHistoryService;
 import com.gorugoru.api.service.UserService;
+import com.gorugoru.api.vo.Card;
+import com.gorugoru.api.vo.NutriCount;
 
 /**
  * JSON REST API Test

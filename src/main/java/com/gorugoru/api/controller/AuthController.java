@@ -24,10 +24,10 @@ import com.gorugoru.api.component.auth.KakaoLoginComponent;
 import com.gorugoru.api.component.auth.KakaoLoginComponent.Token;
 import com.gorugoru.api.component.auth.KakaoLoginComponent.UserProfile;
 import com.gorugoru.api.domain.model.User;
-import com.gorugoru.api.dto.SecUser;
 import com.gorugoru.api.jwt.TokenAuthenticationService;
 import com.gorugoru.api.jwt.UserAuthentication;
 import com.gorugoru.api.service.UserService;
+import com.gorugoru.api.vo.SecUser;
 
 /**
  * 로그인 컨트롤러

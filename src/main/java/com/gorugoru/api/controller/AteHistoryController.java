@@ -24,10 +24,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.domain.model.AteHistory;
 import com.gorugoru.api.domain.model.User;
 import com.gorugoru.api.domain.repository.AteHistoryRepository;
-import com.gorugoru.api.dto.Receipt;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.AteHistoryService;
 import com.gorugoru.api.service.UserService;
+import com.gorugoru.api.vo.Receipt;
 
 @Controller
 @RequestMapping(path = "/atehistory", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

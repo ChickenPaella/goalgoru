@@ -20,10 +20,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gorugoru.api.component.geo.DaumLocalComponent;
 import com.gorugoru.api.constant.JsonResults;
-import com.gorugoru.api.dto.Address;
-import com.gorugoru.api.dto.Location;
 import com.gorugoru.api.jackson.Views;
 import com.gorugoru.api.service.GeoService;
+import com.gorugoru.api.vo.Address;
+import com.gorugoru.api.vo.Location;
 
 @RestController
 @RequestMapping(path = "/geo",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

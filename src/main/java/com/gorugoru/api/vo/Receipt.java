@@ -1,4 +1,4 @@
-package com.gorugoru.api.dto;
+package com.gorugoru.api.vo;
 
 import java.util.Date;
 

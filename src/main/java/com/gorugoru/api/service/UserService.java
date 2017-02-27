@@ -23,7 +23,7 @@ import com.gorugoru.api.domain.model.Nutri;
 import com.gorugoru.api.domain.model.User;
 import com.gorugoru.api.domain.repository.FoodNutriRepository;
 import com.gorugoru.api.domain.repository.UserRepository;
-import com.gorugoru.api.dto.SecUser;
+import com.gorugoru.api.vo.SecUser;
 import com.gorugoru.util.DateUtil;
 
 @Service

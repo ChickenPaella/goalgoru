@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.gorugoru.api.domain.model.AteHistory;
 import com.gorugoru.api.domain.repository.AteHistoryRepository;
-import com.gorugoru.api.dto.Receipt;
+import com.gorugoru.api.vo.Receipt;
 
 @Service
 public class AteHistoryService {

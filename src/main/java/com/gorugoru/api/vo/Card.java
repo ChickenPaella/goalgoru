@@ -1,4 +1,4 @@
-package com.gorugoru.api.dto;
+package com.gorugoru.api.vo;
 
 public class Card {
 	

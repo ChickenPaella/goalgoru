@@ -173,7 +173,7 @@ public class AuthController {
 					tokenAuthenticationService.addAuthentication(response, authentication);
 					
 					//가라 로그인
-					session.setAttribute("principal", principal);
+					//session.setAttribute("principal", principal);
 					
 					//토큰재사용 쿠키
 					Token token = (Token) session.getAttribute(AuthAttr.KAKAO_TOKEN);
@@ -196,8 +196,8 @@ public class AuthController {
 			String jwt = response.getHeader(TokenAuthenticationService.AUTH_HEADER_NAME);
 			
 			//가라 로그인
-			String principal = (String) session.getAttribute("principal");
-			jwt = URLEncoder.encode(principal, "UTF-8");
+			//String principal = (String) session.getAttribute("principal");
+			//jwt = URLEncoder.encode(principal, "UTF-8");
 			
 			URI uri = new URI(referer);
 			String appHost = uri.getScheme()+"://"+uri.getHost()+":"+uri.getPort();
@@ -223,6 +223,13 @@ public class AuthController {
 //	}
 	
 	//=======================================TEST===============================================
+	@RequestMapping(path = "/login_test", method = RequestMethod.GET)
+	public String loginTest(){
+				
+		kakaoLogin.validate("asdasfsafsag");
+		
+		return "redirect:";
+	}
 	
 	@RequestMapping(value = "/refresh")
 	public String refresh() {

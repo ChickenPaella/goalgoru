@@ -1,5 +1,6 @@
 package com.gorugoru.api.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,13 +53,18 @@ public class UserController {
 	AteHistoryService ateHistoryService;
 
 	@RequestMapping(path = "/view/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> view(HttpServletRequest request, ModelMap model, @PathVariable("id") String id)
+	public ResponseEntity<?> view(HttpServletRequest request, ModelMap model, @PathVariable("id") String id, Principal principal)
 			throws JsonProcessingException {
+		
+		if("me".equalsIgnoreCase(id)){
+			id = principal.getName();
+		}
+		
 		logger.info("view() id: " + id);
 
 		User user = userService.getUserById(id);
 		if (user == null) {
-			return new ResponseEntity<String>("{result:\"NOT EXIST\"}", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(JsonResults.RESULT_FAIL_NOT_EXISTS, HttpStatus.BAD_REQUEST);
 		}
 
 		String json = mapper.writerWithView(Views.DEF.class).writeValueAsString(user);

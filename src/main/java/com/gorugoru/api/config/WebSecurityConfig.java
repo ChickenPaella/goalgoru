@@ -63,6 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      		.headers().cacheControl().and().and()
      		.authorizeRequests()
         	.antMatchers("/auth/**").permitAll()
+        	.antMatchers("/rsnt/**").permitAll()
+        	.antMatchers("/geo/**").permitAll()
         	.antMatchers("/admin").hasRole("ADMIN")
         	.anyRequest().authenticated();
     }

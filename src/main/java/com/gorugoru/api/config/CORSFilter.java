@@ -1,12 +1,18 @@
 package com.gorugoru.api.config;
 
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Component;
 
 import com.gorugoru.api.jwt.TokenAuthenticationService;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Component
 public class CORSFilter implements Filter {
@@ -20,7 +26,7 @@ public class CORSFilter implements Filter {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, "+TokenAuthenticationService.AUTH_HEADER_NAME);
+        response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, X-Requested-With, Content-Type, Accept, "+TokenAuthenticationService.AUTH_HEADER_NAME);
         response.setHeader("Access-Control-Expose-Headers", "Location");
         filterChain.doFilter(servletRequest, servletResponse);
     }

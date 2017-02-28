@@ -1,5 +1,7 @@
 package com.gorugoru.api.jwt;
 
+import java.util.Date;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.gorugoru.api.service.UserService;
@@ -28,8 +30,11 @@ public final class TokenHandler {
 
     public String createTokenForUser(UserDetails user) {
         return Jwts.builder()
+        		.setHeaderParam("typ", "JWT")
                 .setSubject(user.getUsername())
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 4 * 60 * 60 * 1000)) // 4 hours
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 }

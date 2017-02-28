@@ -10,18 +10,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 public final class TokenHandler {
-
-    private final String secret;
+	
+    private final byte[] secretKey;
     private final UserService userService;
 
     public TokenHandler(String secret, UserService userService) {
-        this.secret = secret;
+    	this.secretKey = secret.getBytes();
         this.userService = userService;
     }
 
     public UserDetails parseUserFromToken(String token) {
         String username = Jwts.parser()
-                .setSigningKey(secret)
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -34,7 +34,7 @@ public final class TokenHandler {
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 4 * 60 * 60 * 1000)) // 4 hours
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 }

@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	//TODO 하지만 세션이 만들어진다.ㅠㅠ 스프링단에서 불가능한듯..
     	http
     		.csrf().disable()
-    		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+    		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //create session each request
     		.securityContext().securityContextRepository(new NullSecurityContextRepository()).and()
     		// Custom Token based authentication based on the header previously given to the client
     		.addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)

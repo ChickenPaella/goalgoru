@@ -28,6 +28,8 @@ public class CORSFilter implements Filter {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, X-Requested-With, Content-Type, Accept, "+TokenAuthenticationService.AUTH_HEADER_NAME);
         response.setHeader("Access-Control-Expose-Headers", "Location");
+        //ajax(xhr)로 cookie사용 허용 요청시 withCredentials : true 응답헤더 Access-Control-Allow-Origin : * 불가능
+        //response.setHeader("Access-Control-Allow-Credentials", "true");
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
